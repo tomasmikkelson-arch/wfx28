@@ -337,7 +337,7 @@ function home(t) {
           ${site.socials
             .map(
               (s) =>
-                `<a href="${s.url}" target="_blank" rel="noopener" aria-label="${s.label}" data-magnetic>${s.id === 'facebook' ? icons.facebookOutline : icons.linkedin}</a>`
+                `<a href="${s.url}" target="_blank" rel="noopener" aria-label="${s.label}">${s.id === 'facebook' ? icons.facebookOutline : icons.linkedin}</a>`
             )
             .join('')}
           <span class="hero__follow-text">${t.hero.follow}</span>

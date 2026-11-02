@@ -148,7 +148,7 @@ if (reduce) {
       .from('.hero__write', { scale: 0, opacity: 0, duration: 0.9, ease: 'back.out(2)' }, 1)
       .from('.hero__ring', { scale: 0, rotate: -120, opacity: 0, duration: 1, ease: 'back.out(1.7)' }, 0.8)
       .from('.hero__line', { scaleY: 0, duration: 1 }, 0.6)
-      .from('.hero__follow a, .hero__follow-text', { x: -20, opacity: 0, stagger: 0.1, duration: 0.7 }, 0.9)
+      .from('.hero__follow a, .hero__follow-text', { opacity: 0, stagger: 0.1, duration: 0.7, clearProps: 'opacity' }, 0.9)
       .from('.hero__frame', { scaleX: 0.6, opacity: 0, duration: 1.2, ease: 'expo.out' }, 1);
 
     // Photo gently shrinks/lifts while you scroll away

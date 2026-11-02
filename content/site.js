@@ -7,15 +7,14 @@ export default {
     { id: 'facebook', label: 'Facebook', url: 'https://www.facebook.com/Ihor.Isychenko/' },
     { id: 'linkedin', label: 'LinkedIn', url: 'https://www.linkedin.com/in/ihor-isychenko/' },
   ],
-  // Contact form is delivered by formsubmit.co to the email above.
+  // Contact form messages are delivered by formsubmit.co to this address.
   // The very first submission sends an activation email — confirm it once.
-  formEndpoint: 'https://formsubmit.co/ajax/isychenko_ihor@icloud.com',
+  formEndpoint: 'https://formsubmit.co/ajax/tomas.mikkelson@gmail.com',
   // Year shown at the end of the copyright line (current year is used if later).
   copyrightUntil: 2027,
   // Organisations and projects shown in the purple "Projects & partners" band.
   partners: [
     'Institute of Mass Information',
-    'Mediabaza',
     'Legal Hundred',
     'Internews',
     'NDI',
