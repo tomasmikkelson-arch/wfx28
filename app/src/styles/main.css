@@ -396,7 +396,9 @@ b, strong { font-weight: 700; }
 .phero { position: relative; overflow: hidden; padding: calc(var(--header-h) + 100px) 0 100px; }
 .page--purple .phero { background: var(--purple); color: #fff; }
 .page--yellow .phero { background: var(--yellow); color: var(--ink); }
-.phero__bg { position: absolute; inset: -15% 0; background-size: 1600px auto; background-position: center; will-change: transform; }
+.phero__bg { position: absolute; inset: -20% 0; background-size: cover; background-position: center; will-change: transform; }
+.phero__bg--purple { background-image: url(/img/bg-purple2-3200.webp); background-image: image-set(url(/img/bg-purple2-1600.webp) 1x, url(/img/bg-purple2-3200.webp) 2x); }
+.phero__bg--yellow { background-image: url(/img/bg-yellow-2600.webp); }
 .phero__grid { position: relative; display: grid; grid-template-columns: 555px 1fr; gap: 60px; align-items: center; }
 .phero__grid--rev { grid-template-columns: 1fr 475px; gap: 115px; }
 .phero__img { border-radius: 80px; overflow: hidden; }
@@ -416,7 +418,7 @@ b, strong { font-weight: 700; }
 .article__cta { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
 .article__deck { position: sticky; top: calc(var(--header-h) + 20px); }
 .collab { position: relative; overflow: hidden; padding: 80px 0; background: var(--soft); }
-.collab__bg { position: absolute; inset: 0; background-size: cover; background-position: center; }
+.collab__bg { position: absolute; inset: -18% 0; background-size: cover; background-position: center; will-change: transform; }
 .collab__grid { position: relative; display: grid; grid-template-columns: 555px 1fr; gap: 60px; align-items: start; }
 .collab__form { background: #fff; border-radius: 40px; padding: 50px 100px; box-shadow: 0 30px 60px -40px rgba(28, 26, 26, 0.25); }
 .collab__form .field span { position: absolute; left: -9999px; }
@@ -566,11 +568,11 @@ b, strong { font-weight: 700; }
 .reviews__sep i { width: 26px; height: 32px; flex: none; background: var(--purple); -webkit-mask: url(/svg/sparkle.svg) center / contain no-repeat; mask: url(/svg/sparkle.svg) center / contain no-repeat; animation: spin 10s linear infinite; }
 
 /* back button on training pages */
-.phero__bar { position: relative; z-index: 2; margin-bottom: 36px; }
+.phero__bar { position: relative; z-index: 2; margin-bottom: 64px; }
 .back { display: inline-flex; align-items: center; gap: 10px; padding: 10px 20px 10px 12px; border-radius: 999px; font-size: 0.85rem; font-weight: 700; background: rgba(255, 255, 255, 0.95); color: var(--ink); box-shadow: 0 10px 24px -14px rgba(28, 26, 26, 0.5); transition: background 0.3s, color 0.3s, gap 0.4s var(--ease); }
 .back svg { width: 30px; height: 30px; padding: 6px; border-radius: 50%; background: var(--purple); color: #fff; transition: transform 0.4s var(--ease); }
 .back:hover { background: var(--ink); color: #fff; gap: 14px; }
 .back:hover svg { transform: translateX(-3px); }
 .page--yellow .back svg { background: var(--ink); color: var(--yellow); }
 .phero { padding-top: calc(var(--header-h) + 40px); }
-@media (max-width: 900px) { .phero__bar { margin-bottom: 24px; } .phero { padding-top: calc(var(--header-h) + 24px); } }
+@media (max-width: 900px) { .phero__bar { margin-bottom: 36px; } .phero { padding-top: calc(var(--header-h) + 24px); } }

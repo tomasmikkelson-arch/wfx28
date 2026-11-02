@@ -507,7 +507,7 @@ function training(t, slug) {
   return `
   <main id="main" class="page page--${p.theme}">
     <section class="phero" id="top">
-      <div class="phero__bg" data-parallax="0.2" style="background-image:url(${bg(p.theme === 'purple' ? 'bg-purple' : 'bg-yellow', 2600)})"></div>
+      <div class="phero__bg phero__bg--${p.theme}" data-parallax="0.2"></div>
       <div class="container phero__bar"><a class="back" href="${pageUrl(t.lang)}#media" data-back>${icons.back}<span>${t.nav.back}</span></a></div>
       <div class="container phero__grid${p.heroImageLeft ? '' : ' phero__grid--rev'}">${p.heroImageLeft ? heroImg + heroText : heroText + heroImg}</div>
     </section>
@@ -527,7 +527,7 @@ function training(t, slug) {
       }
     </section>
     <section class="collab" id="contact-form">
-      <div class="collab__bg" style="background-image:url(${bg('bg-dino', 2400)})"></div>
+      <div class="collab__bg" data-parallax="0.35" style="background-image:url(${bg('bg-dino', 2400)})"></div>
       <div class="container collab__grid">
         <form class="collab__form form reveal" data-form data-endpoint="${site.formEndpoint}" novalidate>
           <h2 class="collab__form-title">${t.form.pageTitle}</h2>
