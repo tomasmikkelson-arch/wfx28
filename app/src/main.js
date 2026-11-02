@@ -333,12 +333,22 @@ $$('[data-form]').forEach((form) =>
     try {
       const data = Object.fromEntries(new FormData(form));
       if (data._honey) throw new Error('spam');
-      const res = await fetch(form.dataset.endpoint, {
+      const endpoint = form.dataset.endpoint;
+      const isAppsScript = endpoint.includes('script.google.com');
+      // Never leave the visitor waiting: give up after 15 s and show the error popup.
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 15000);
+      const payload = { ...data, page: location.href, lang: document.documentElement.lang };
+      const res = await fetch(endpoint, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ ...data, _template: 'table', _captcha: 'false', page: location.href }),
-      });
+        signal: ctrl.signal,
+        // Apps Script: text/plain avoids a CORS preflight; FormSubmit expects JSON.
+        headers: isAppsScript ? { 'Content-Type': 'text/plain;charset=utf-8' } : { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(isAppsScript ? payload : { ...payload, _template: 'table', _captcha: 'false' }),
+      }).finally(() => clearTimeout(timer));
       if (!res.ok) throw new Error(String(res.status));
+      const json = await res.json().catch(() => ({}));
+      if (json.ok === false || json.success === 'false' || json.success === false) throw new Error('rejected');
       form.reset();
       form.classList.remove('was-validated');
       showStatus(true);
