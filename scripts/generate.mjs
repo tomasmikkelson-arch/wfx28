@@ -179,7 +179,7 @@ function footer(t) {
             .map((s) => `<a href="${s.url}" target="_blank" rel="noopener" aria-label="${s.label}" data-magnetic>${icons[s.id]}</a>`)
             .join('')}</div>
         </div>
-        <div class="footer__col">
+        <div class="footer__col footer__col--links">
           <h3 class="footer__title">${t.footer.quick}</h3>
           <ul class="footer__links">
             <li><a href="${home}#biography">${t.nav.about}</a></li>
