@@ -8,7 +8,7 @@ export default {
     { id: 'linkedin', label: 'LinkedIn', url: 'https://www.linkedin.com/in/ihor-isychenko/' },
   ],
   // Contact form handler: Google Apps Script (tools/contact-form/Code.gs) in the owner's Google account.
-  formEndpoint: 'https://script.google.com/macros/s/AKfycbw-zNsWJ8-e0_JnoQ1zBWl9zvJkG95AH6o1DOvwgmoJxzLRYTTz1F0nc5EdEmjgRP0PCQ/exec',
+  formEndpoint: 'https://script.google.com/macros/s/AKfycbwT4o4PLahfmJRtCc08VJDoOr3OynZzRvfSrZhTR8k9vY9yaMeexZMKGfgdzaZFFEI_GA/exec',
   // Year shown at the end of the copyright line (current year is used if later).
   copyrightUntil: 2027,
   // Organisations and projects shown in the purple "Projects & partners" band.
