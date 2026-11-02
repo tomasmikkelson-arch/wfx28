@@ -13,7 +13,7 @@ export default {
     experience: 'Experience',
     contacts: 'Contacts',
     media: 'Media',
-    back: 'Back to trainings',
+    back: 'Back to media',
     cv: 'View CV',
     menu: 'Menu',
     close: 'Close',

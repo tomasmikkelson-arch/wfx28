@@ -21,7 +21,7 @@ export default {
     experience: 'Expérience',
     contacts: 'Contacts',
     media: 'Médias',
-    back: 'Retour aux formations',
+    back: 'Retour aux médias',
     cv: 'Voir le CV',
     menu: 'Menu',
     close: 'Fermer',

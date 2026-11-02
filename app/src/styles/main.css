@@ -320,8 +320,8 @@ b, strong { font-weight: 700; }
 .footer__socials a:hover { background: var(--ink); color: var(--yellow); }
 .footer__socials svg { width: 24px; }
 .footer__title { font-size: 0.8rem; font-weight: 400; color: #8a6d00; padding-bottom: 14px; margin-bottom: 24px; position: relative; }
-.footer__title::after { content: ''; position: absolute; left: 0; bottom: 0; width: 100px; height: 1px; background: #c9a20a; }
-.footer__col:last-child .footer__title::after { width: 60px; }
+.footer__title::after { content: ''; position: absolute; left: 0; bottom: 0; width: 120px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, #a07d00, transparent); }
+.footer__col:last-child .footer__title::after { width: 120px; }
 .footer__links li { margin-bottom: 16px; }
 .footer__links a { font-size: 1.05rem; font-weight: 400; color: var(--ink); position: relative; transition: padding 0.4s var(--ease); }
 .footer__links a::before { content: '→'; position: absolute; left: -22px; opacity: 0; transition: opacity 0.3s, left 0.4s var(--ease); }
