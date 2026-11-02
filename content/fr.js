@@ -292,7 +292,7 @@ export default {
     items: [
       {
         ...en.testimonials.items[0],
-        role: 'Responsable de la communication, Legal Hundred',
+        role: 'Directrice d’agence, avocate senior',
         quote:
           'Ihor comprend clairement les objectifs de communication et possède un sens visuel affirmé. En travaillant ensemble sur un projet dans le domaine juridique, j’ai découvert un professionnel fiable et réfléchi. Il sait traiter des informations complexes, saisit le contexte de chaque tâche et trouve des solutions visuelles claires et efficaces. Il est attentif aux détails, respecte les délais et reste ouvert à la discussion et aux retours.',
       },

@@ -296,7 +296,7 @@ export default {
     items: [
       {
         name: 'Anastasiia Kolomiichuk',
-        role: 'Communications Manager, Legal Hundred',
+        role: 'Head of Branch, Senior Lawyer',
         photo: 'anastasiia',
         url: 'https://www.linkedin.com/in/anastasiia-kolomiichuk-10b14b265/',
         quote:
