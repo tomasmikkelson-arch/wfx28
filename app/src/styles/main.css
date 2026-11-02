@@ -586,3 +586,5 @@ b, strong { font-weight: 700; }
   .footer__grid { grid-template-columns: 1fr; gap: 32px; }
   .footer__col:last-child { max-width: 480px; width: 100%; justify-self: center; }
 }
+
+.status__code { font-size: 0.75rem; color: #b0adbd; }

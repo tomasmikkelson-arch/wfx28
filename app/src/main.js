@@ -308,11 +308,13 @@ document.addEventListener('click', (e) => {
 
 /* ---------------- forms ---------------- */
 const statusModal = $('[data-status-modal]');
-function showStatus(ok) {
+function showStatus(ok, code = '') {
   const title = $('[data-status-title]', statusModal);
   const text = $('[data-status-text]', statusModal);
   title.textContent = ok ? title.dataset.ok : title.dataset.err;
   text.textContent = ok ? text.dataset.ok : text.dataset.err;
+  // Small technical code helps diagnose delivery problems (e.g. network, server, invalid).
+  if (!ok && code) { const c = document.createElement('small'); c.className = 'status__code'; c.textContent = `(${code})`; text.append(document.createElement('br'), c); }
   $('[data-status-icon]', statusModal).className = `status__icon ${ok ? 'is-ok' : 'is-err'}`;
   $$('dialog[open]').forEach((d) => d !== statusModal && d.close());
   openDialog(statusModal);
@@ -346,14 +348,16 @@ $$('[data-form]').forEach((form) =>
         headers: isAppsScript ? { 'Content-Type': 'text/plain;charset=utf-8' } : { 'Content-Type': 'application/json', Accept: 'application/json' },
         body: JSON.stringify(isAppsScript ? payload : { ...payload, _template: 'table', _captcha: 'false' }),
       }).finally(() => clearTimeout(timer));
-      if (!res.ok) throw new Error(String(res.status));
+      if (!res.ok) throw new Error('http ' + res.status);
       const json = await res.json().catch(() => ({}));
-      if (json.ok === false || json.success === 'false' || json.success === false) throw new Error('rejected');
+      if (json.ok === false || json.success === 'false' || json.success === false) throw new Error(json.error || 'rejected');
       form.reset();
       form.classList.remove('was-validated');
       showStatus(true);
-    } catch {
-      showStatus(false);
+    } catch (err) {
+      const code = err?.name === 'AbortError' ? 'timeout' : err?.name === 'TypeError' ? 'network' : err?.message || 'error';
+      console.error('Form error:', err);
+      showStatus(false, code);
     } finally {
       label.textContent = original;
       btn.disabled = false;
