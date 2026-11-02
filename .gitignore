@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.pages.json
+app/**/*.html
+!app/src/**
+app/public/404.html
