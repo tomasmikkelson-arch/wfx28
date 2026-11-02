@@ -7,9 +7,8 @@ export default {
     { id: 'facebook', label: 'Facebook', url: 'https://www.facebook.com/Ihor.Isychenko/' },
     { id: 'linkedin', label: 'LinkedIn', url: 'https://www.linkedin.com/in/ihor-isychenko/' },
   ],
-  // Contact form messages are delivered by formsubmit.co to this address.
-  // The very first submission sends an activation email — confirm it once.
-  formEndpoint: 'https://formsubmit.co/ajax/tomas.mikkelson@gmail.com',
+  // Contact form handler: Google Apps Script (tools/contact-form/Code.gs) in the owner's Google account.
+  formEndpoint: 'https://script.google.com/macros/s/AKfycbw-zNsWJ8-e0_JnoQ1zBWl9zvJkG95AH6o1DOvwgmoJxzLRYTTz1F0nc5EdEmjgRP0PCQ/exec',
   // Year shown at the end of the copyright line (current year is used if later).
   copyrightUntil: 2027,
   // Organisations and projects shown in the purple "Projects & partners" band.
