@@ -67,6 +67,19 @@ const icons = {
 const emailHtml = () =>
   `<a class="js-email" data-u="${site.email.user}" data-d="${site.email.domain}" href="#contact">${site.email.user}<span aria-hidden="true">&#64;</span>${site.email.domain}</a>`;
 
+// ---------- analytics (same IDs as the current isychenko.com) ----------
+function analytics() {
+  const a = site.analytics || {};
+  let out = '';
+  if (a.ga4)
+    out += `<script async src="https://www.googletagmanager.com/gtag/js?id=${a.ga4}"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${a.ga4}');</script>`;
+  if (a.clarity)
+    out += `
+    <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)})(window,document,"clarity","script","${a.clarity}");</script>`;
+  return out;
+}
+
 // ---------- shared chrome ----------
 function head(t, { title, description, slug = '' }) {
   const alternates = site.languages
@@ -97,6 +110,7 @@ function head(t, { title, description, slug = '' }) {
     <script>document.documentElement.classList.replace('no-js','js')</script>
     <link rel="stylesheet" href="/src/styles/main.css">
     <script type="module" src="/src/main.js"></script>
+    ${analytics()}
     <script type="application/ld+json">${JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'Person',
@@ -256,6 +270,36 @@ function popups(t, withExp) {
 const roundBtn = (label, attrs, cls = '') =>
   `<button type="button" class="round-btn ${cls}" ${attrs} data-magnetic><span class="round-btn__circle">${arrow}</span><span class="round-btn__label">${label}</span></button>`;
 
+// ---------- testimonials (rendered only when content has items) ----------
+function testimonials(t) {
+  const T = t.testimonials;
+  if (!T || !T.items.length) return '';
+  return `
+    <section class="reviews" aria-labelledby="reviews-title">
+      <div class="container">
+        <div class="reviews__head">
+          <p class="reviews__kicker reveal">${T.kicker}</p>
+          <h2 class="section-title reveal-lines" id="reviews-title">${T.title}</h2>
+        </div>
+        <ul class="reviews__list">
+          ${T.items
+            .map(
+              (r) => `<li class="review reveal" data-tilt>
+            <svg class="review__mark" viewBox="0 0 48 36" aria-hidden="true"><path fill="currentColor" d="M0 36V22C0 9.6 6.4 2.3 19.2 0l2 5.2C14 7.4 10.6 11.6 10.4 18H20v18H0zm28 0V22C28 9.6 34.4 2.3 47.2 0l2 5.2C42 7.4 38.6 11.6 38.4 18H48v18H28z"/></svg>
+            <blockquote class="review__quote"><p>${r.quote}</p></blockquote>
+            <div class="review__person">
+              ${r.photo ? `<img class="review__photo" src="${asset(`img/people/${r.photo}.webp`)}" alt="${esc(r.name)}" width="64" height="64" loading="lazy">` : ''}
+              <div><p class="review__name">${r.name}</p><p class="review__role">${r.role}</p></div>
+            </div>
+            ${r.url ? `<a class="review__src" href="${r.url}" target="_blank" rel="noopener">${icons.linkedin}${T.source}</a>` : ''}
+          </li>`
+            )
+            .join('')}
+        </ul>
+      </div>
+    </section>`;
+}
+
 // ---------- home ----------
 function home(t) {
   const ringText = (t.hero.ring + t.hero.ring).trim();
@@ -382,6 +426,8 @@ function home(t) {
       </div>
     </section>
 
+    ${testimonials(t)}
+
     <section class="dino" aria-labelledby="dino-title">
       <div class="dino__bg" data-parallax="0.2" style="background-image:url(${bg('bg-dino', 2400)})"></div>
       <div class="dino__grid container">
@@ -465,6 +511,14 @@ function training(t, slug) {
         ${p.lead.map((l) => `<p class="reveal">${l}</p>`).join('')}
       </div>
       <div class="article__grid${p.deckLeft ? ' article__grid--rev' : ''}">${p.deckLeft ? deck + text : text + deck}</div>
+      ${
+        p.video
+          ? `<div class="video reveal-img"><button type="button" class="video__btn" data-video="${p.video.id}" aria-label="Play: ${esc(p.video.title)}">
+          <img src="https://i.ytimg.com/vi/${p.video.id}/maxresdefault.jpg" alt="${esc(p.video.title)}" loading="lazy" width="1280" height="720">
+          <span class="video__play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span>
+        </button></div>`
+          : ''
+      }
     </section>
     <section class="collab" id="contact-form">
       <div class="collab__bg" style="background-image:url(${bg('bg-dino', 2400)})"></div>

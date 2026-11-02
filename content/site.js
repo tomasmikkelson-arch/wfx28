@@ -12,8 +12,23 @@ export default {
   formEndpoint: 'https://formsubmit.co/ajax/isychenko_ihor@icloud.com',
   // Year shown at the end of the copyright line (current year is used if later).
   copyrightUntil: 2027,
-  // Organisations named in the work experience — shown in the purple band.
-  partners: ['Institute of Mass Information', 'Mediabaza', 'Internews', 'Chemonics International', 'NDI', 'IREX', 'Prague Civil Society Centre', 'NGO «Make Sense»', '6262.com.ua', '0372.ua'],
+  // Organisations and projects shown in the purple "Projects & partners" band.
+  partners: [
+    'Institute of Mass Information',
+    'Mediabaza',
+    'Legal Hundred',
+    'Internews',
+    'NDI',
+    'Prosper Global (Mercy Corps)',
+    'Chemonics International',
+    'IREX',
+    'Prague Civil Society Centre',
+    'NGO «Make Sense»',
+    '6262.com.ua',
+    '0372.ua',
+  ],
+  // Same analytics as on the current isychenko.com (Google Analytics 4 + Microsoft Clarity).
+  analytics: { ga4: 'G-6B2CXD3TN5', clarity: 'pn2tnj629x' },
   languages: [
     { code: 'en', label: 'EN', name: 'English', prefix: '' },
     { code: 'fr', label: 'FR', name: 'Français', prefix: 'fr/' },

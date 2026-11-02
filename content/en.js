@@ -288,7 +288,15 @@ export default {
       },
     ],
   },
-  band: { label: 'Collaborated with' },
+  band: { label: 'Projects & partners' },
+  testimonials: {
+    title: 'What colleagues say',
+    kicker: 'Recommendations',
+    source: 'Recommendation on LinkedIn',
+    items: [
+      // { name: 'Full Name', role: 'Position, Organisation', photo: 'file-name-in-img-people', quote: 'Text…', url: 'https://www.linkedin.com/in/…' },
+    ],
+  },
   dino: {
     connect: 'Connect with me',
     title: 'Bringing marketing visions to life through stunning design. Let’s connect!',
@@ -375,6 +383,7 @@ export default {
         'To achieve the best results, it’s important to use strategic approaches, such as actively engaging with followers through comments and messages and utilizing new platform tools. For example, on Facebook, it’s advisable to avoid external links in posts to prevent reduced reach, while on Telegram, creating weekly news roundups is useful to maintain audience interest in your content.',
       ],
       deck: 'work-deck',
+      video: { id: '6BRTMcpcJfs', title: 'Social Media 2025: Challenges and Opportunities for Media — training' },
       deckLeft: true,
       dateline: 'Chernivtsi, October 11, 2024',
       press: 'https://imi.org.ua/advices/yak-efektyvno-pratsyuvaty-z-instagram-facebook-i-telegram-porady-vid-eksperta-i64289',

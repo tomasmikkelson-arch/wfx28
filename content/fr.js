@@ -33,12 +33,12 @@ export default {
     role: 'Marketing | Communication | Design graphique',
     write: 'M’écrire',
     follow: 'Suivez-moi',
-    ring: 'Travaillons ensemble ! ',
+    ring: 'Travaillons ensemble! ',
   },
   bio: {
     ...en.bio,
     title: 'Biographie',
-    lead: 'Bonjour ! Je suis Ihor Isychenko, expert en communication visuelle et en marketing',
+    lead: 'Bonjour! Je suis Ihor Isychenko, expert en communication visuelle et en marketing',
     leadRest:
       ', passionné par l’art de donner vie aux idées grâce au design, au contenu et au storytelling digital. Mon expérience en design graphique, en gestion des réseaux sociaux et en marketing m’a permis de développer un sens aigu de la communication visuelle, de l’image de marque et de l’engagement du public.',
     paragraphs: [
@@ -50,20 +50,20 @@ export default {
     labels: { name: 'Nom', email: 'E-mail', city: 'Ville' },
     region: '(région de Donetsk, Ukraine)',
     skills: [
-      'Design graphique ;',
-      'Illustration ;',
-      'Typographie ;',
-      'Communication visuelle ;',
-      'Théorie des couleurs ;',
-      'Gestion de projet ;',
-      'Planification stratégique ;',
-      'Gestion de marque ;',
-      'Marketing sur les réseaux sociaux ;',
-      'Marketing digital ;',
-      'Indicateurs de performance et KPI ;',
+      'Design graphique;',
+      'Illustration;',
+      'Typographie;',
+      'Communication visuelle;',
+      'Théorie des couleurs;',
+      'Gestion de projet;',
+      'Planification stratégique;',
+      'Gestion de marque;',
+      'Marketing sur les réseaux sociaux;',
+      'Marketing digital;',
+      'Indicateurs de performance et KPI;',
       'Présentation et communication.',
     ],
-    tools: en.bio.tools.map((t) => t.replace(/;$/, ' ;')),
+    tools: en.bio.tools,
   },
   numbers: {
     titleBold: 'L’expertise',
@@ -88,13 +88,13 @@ export default {
         body: [
           'J’étais chargé de concevoir et de gérer la communication visuelle sur les réseaux sociaux, le site web de l’organisation et les supports imprimés. Mon travail comprenait la création de visuels statiques, d’infographies, d’illustrations, de courtes vidéos sous-titrées, ainsi que la rédaction de contenus pour le site. Je veillais à la cohérence de tous les canaux, numériques comme hors ligne.',
           'J’ai également créé, géré et développé la page LinkedIn officielle de l’organisation, en définissant son style visuel, la structure de ses contenus et son approche de communication afin de renforcer sa présence professionnelle.',
-          'En tant que designer principal de « Mediabaza », un réseau national de 15 hubs médiatiques régionaux soutenant les journalistes indépendants en temps de guerre, j’ai coordonné les standards visuels de l’ensemble des hubs : supervision des créations proposées par les chargés de communication, validation des supports et maintien d’une identité visuelle unifiée sur tout le réseau.',
+          'En tant que designer principal de «Mediabaza», un réseau national de 15 hubs médiatiques régionaux soutenant les journalistes indépendants en temps de guerre, j’ai coordonné les standards visuels de l’ensemble des hubs: supervision des créations proposées par les chargés de communication, validation des supports et maintien d’une identité visuelle unifiée sur tout le réseau.',
         ],
       }),
       exp(
         1,
         {
-          company: 'ONG « Make Sense »',
+          company: 'ONG «Make Sense»',
           role: 'Directeur marketing (CMO)',
           period: 'Févr. 2024 - Févr. 2025',
           place: 'Tchernivtsi, Ukraine',
@@ -105,7 +105,7 @@ export default {
           ],
         },
         {
-          org: 'ONG « Make Sense »',
+          org: 'ONG «Make Sense»',
           blocks: [
             {
               li: [
@@ -115,8 +115,8 @@ export default {
                 'Gestion des réseaux sociaux (Facebook, Instagram, LinkedIn) et SMM (participation à l’élaboration du plan de contenu, analyse de l’efficacité et ajustement de la stratégie).',
                 'Collaboration avec les bailleurs Internews, Chemonics International, NDI, Irex, Prague Civil Society Centre (élaboration de stratégies visuelles et marketing innovantes, préparation rigoureuse des rapports, collecte et analyse des données, préparation des publications, respect des exigences de branding et de communication des bailleurs).',
                 'Coordination avec les responsables de départements (communication et promotion des projets clés).',
-                'Création d’une charte graphique et d’un design unique pour l’ONG (logo, palette de couleurs, typographies, éléments de style et règles d’usage ; une identité visuelle harmonieuse et reconnaissable reflétant la mission et les valeurs de l’organisation).',
-                'Conception et production de supports marketing (supervision de brochures, présentations, bannières ; collaboration avec les designers).',
+                'Création d’une charte graphique et d’un design unique pour l’ONG (logo, palette de couleurs, typographies, éléments de style et règles d’usage; une identité visuelle harmonieuse et reconnaissable reflétant la mission et les valeurs de l’organisation).',
+                'Conception et production de supports marketing (supervision de brochures, présentations, bannières; collaboration avec les designers).',
                 'Conception et maintenance de landing pages et de sites web (création de pages attractives sur des plateformes comme Weblium et Webflow).',
                 'Suivi et analyse des performances des contenus (outils d’analyse comme Meta Business Suite et Google Analytics).',
               ],
@@ -127,17 +127,17 @@ export default {
       exp(
         2,
         {
-          company: 'ONG « Make Sense »',
+          company: 'ONG «Make Sense»',
           role: 'Responsable marketing et designer graphique',
           period: 'Oct. 2023 - Févr. 2024',
           place: 'Tchernivtsi, Ukraine',
           body: [
             'En tant que responsable marketing, j’ai élaboré et mis en œuvre des stratégies de promotion de la marque, analysé le marché et la concurrence, créé des plans de contenu et proposé de nouvelles idées pour renforcer l’efficacité de la communication.',
-            'En tant que designer graphique, j’ai créé des contenus visuels alignés sur les objectifs marketing et renforçant la stratégie de marque : illustrations, affiches pour des articles d’actualité, couvertures et icônes, ainsi que des visuels pour les réseaux sociaux.',
+            'En tant que designer graphique, j’ai créé des contenus visuels alignés sur les objectifs marketing et renforçant la stratégie de marque: illustrations, affiches pour des articles d’actualité, couvertures et icônes, ainsi que des visuels pour les réseaux sociaux.',
           ],
         },
         {
-          org: 'ONG « Make Sense »',
+          org: 'ONG «Make Sense»',
           blocks: [
             {
               li: [
@@ -145,7 +145,7 @@ export default {
                 'Création d’un style visuel unifié pour l’organisation, adaptable à chaque pôle.',
                 'Conception et production de supports marketing (brochures, présentations, bannières) pour tous les projets et initiatives.',
                 'Gestion de la présence de l’organisation sur les réseaux sociaux et élaboration d’un plan de contenu couvrant les activités de tous les pôles.',
-                'Collaboration avec les bailleurs : préparation des rapports, collecte de statistiques, mise en forme visuelle des supports, publication sur les réseaux sociaux et respect des exigences de branding.',
+                'Collaboration avec les bailleurs: préparation des rapports, collecte de statistiques, mise en forme visuelle des supports, publication sur les réseaux sociaux et respect des exigences de branding.',
                 'Coordination avec les responsables de départements pour une communication et une promotion efficaces de leurs projets.',
                 'Soutien visuel aux campagnes de collecte de fonds et aux événements.',
               ],
@@ -161,7 +161,7 @@ export default {
           period: 'Août 2022 - Févr. 2024',
           place: 'Tchernivtsi, Ukraine',
           body: [
-            'J’étais chargé de créer et de gérer les contenus des réseaux sociaux, en développant des stratégies pour engager l’audience et accroître la visibilité de la marque : planification et publication des posts, suivi des retours des utilisateurs et analyse des résultats des campagnes pour en maximiser l’efficacité.',
+            'J’étais chargé de créer et de gérer les contenus des réseaux sociaux, en développant des stratégies pour engager l’audience et accroître la visibilité de la marque: planification et publication des posts, suivi des retours des utilisateurs et analyse des résultats des campagnes pour en maximiser l’efficacité.',
             'Je créais également des contenus visuels adaptés aux plateformes sociales et alignés sur la stratégie marketing globale, notamment des visuels de posts et des bannières publicitaires.',
           ],
         },
@@ -197,7 +197,7 @@ export default {
         },
         {
           blocks: [
-            { h: 'Responsable marketing des réseaux sociaux :' },
+            { h: 'Responsable marketing des réseaux sociaux:' },
             {
               li: [
                 'Élaboration et mise en œuvre de la stratégie de présence du média sur les réseaux sociaux (public cible, choix des plateformes, planification des contenus).',
@@ -210,14 +210,14 @@ export default {
                 'Gestion de crise sur les réseaux sociaux (stratégies de réponse aux situations négatives, gestion de la réputation de la marque).',
               ],
             },
-            { h: 'Designer médias numériques :' },
+            { h: 'Designer médias numériques:' },
             {
               li: [
-                'Création de contenus visuels (éléments graphiques pour sites web, réseaux sociaux et autres plateformes ; bannières, infographies, illustrations ; montage vidéo et animation de base).',
+                'Création de contenus visuels (éléments graphiques pour sites web, réseaux sociaux et autres plateformes; bannières, infographies, illustrations; montage vidéo et animation de base).',
                 'Adaptation du design (optimisation des visuels pour tous les appareils et pour chaque réseau social).',
-                'Design print (flyers, brochures, citylights, cartes de visite, stickers ; motifs pour t-shirts et sacs).',
-                'Branding (entretien et développement de l’identité visuelle ; modèles pour les publications régulières).',
-                'Travail d’équipe (avec rédacteurs, journalistes et marketeurs ; traduction des idées créatives en solutions visuelles).',
+                'Design print (flyers, brochures, citylights, cartes de visite, stickers; motifs pour t-shirts et sacs).',
+                'Branding (entretien et développement de l’identité visuelle; modèles pour les publications régulières).',
+                'Travail d’équipe (avec rédacteurs, journalistes et marketeurs; traduction des idées créatives en solutions visuelles).',
                 'Projets financés (styles visuels pour la durée des projets, visuels pour les articles et posts).',
                 'Analyse et optimisation continues (performances des contenus Facebook et Instagram via Meta Business Suite, et du site via Google Analytics).',
               ],
@@ -243,7 +243,7 @@ export default {
                 'Mise en page et design des ouvrages.',
                 'Conception de couvertures originales.',
                 'Création d’icônes et d’autres éléments visuels pour le site et les réseaux sociaux de l’éditeur.',
-                'Conception et préparation de supports imprimés : cartes de visite, brochures et flyers.',
+                'Conception et préparation de supports imprimés: cartes de visite, brochures et flyers.',
               ],
             },
           ],
@@ -257,13 +257,13 @@ export default {
           place: 'Londres, Royaume-Uni',
           body: [
             'Je réalisais des graphismes vectoriels 2D en style flat. Mes principales missions consistaient à concevoir des illustrations et des icônes pour l’entreprise, en créant des illustrations vectorielles originales conformes à son style et à ses standards de marque.',
-            'La conception d’icônes était un aspect essentiel de mon travail : elles devaient être simples, facilement reconnaissables et fonctionnelles sur toutes les plateformes. Je veillais à ce que chaque icône exprime clairement sa fonction et reste lisible à toutes les tailles.',
+            'La conception d’icônes était un aspect essentiel de mon travail: elles devaient être simples, facilement reconnaissables et fonctionnelles sur toutes les plateformes. Je veillais à ce que chaque icône exprime clairement sa fonction et reste lisible à toutes les tailles.',
           ],
         },
         {
           blocks: [
             {
-              p: 'J’ai commencé ma carrière comme illustrateur freelance, en créant des images vectorielles. J’ai ensuite eu l’occasion de collaborer officiellement avec une école de langues à Londres, où j’étais chargé de :',
+              p: 'J’ai commencé ma carrière comme illustrateur freelance, en créant des images vectorielles. J’ai ensuite eu l’occasion de collaborer officiellement avec une école de langues à Londres, où j’étais chargé de:',
             },
             {
               li: [
@@ -280,10 +280,16 @@ export default {
       ),
     ],
   },
-  band: { label: 'J’ai collaboré avec' },
+  band: { label: 'Projets et partenaires' },
+  testimonials: {
+    title: 'Ce qu’en disent mes collègues',
+    kicker: 'Recommandations',
+    source: 'Recommandation sur LinkedIn',
+    items: [],
+  },
   dino: {
     connect: 'Me contacter',
-    title: 'Donner vie aux visions marketing grâce à un design remarquable. Restons en contact !',
+    title: 'Donner vie aux visions marketing grâce à un design remarquable. Restons en contact!',
     text: 'Je transforme des concepts marketing abstraits en créations visuelles qui captivent et convertissent.',
     pill: 'Jurassic marketer',
   },
@@ -292,10 +298,10 @@ export default {
     kicker: 'Les médias parlent de moi',
     items: [
       { ...en.media.items[0], title: 'Comment travailler efficacement avec Instagram, Facebook et Telegram' },
-      { ...en.media.items[1], title: 'Tendances des réseaux sociaux en 2025 : conseils d’expert pour les médias' },
+      { ...en.media.items[1], title: 'Tendances des réseaux sociaux en 2025: conseils d’expert pour les médias' },
       {
         ...en.media.items[2],
-        title: 'TikTok, YouTube, Instagram & Cie. Quels réseaux sociaux sont populaires chez les jeunes aujourd’hui ?',
+        title: 'TikTok, YouTube, Instagram & Cie. Quels réseaux sociaux sont populaires chez les jeunes aujourd’hui?',
       },
     ],
   },
@@ -309,7 +315,7 @@ export default {
       },
       {
         ...en.trainings.items[1],
-        title: 'Réseaux sociaux 2025 : défis et opportunités pour les médias',
+        title: 'Réseaux sociaux 2025: défis et opportunités pour les médias',
         text: 'Lors de cette formation, j’ai expliqué comment les médias peuvent s’adapter aux nouvelles tendances et aux algorithmes, et tirer parti des opportunités des réseaux sociaux en 2025.',
       },
     ],
@@ -319,32 +325,32 @@ export default {
       ...en.pages['effective-media-social'],
       metaTitle: 'Méthodes efficaces pour les médias sur les réseaux sociaux — Ihor Isychenko',
       title: 'Méthodes efficaces de travail des médias sur les réseaux sociaux',
-      subtitle: 'Ma formation pour les médias : conseils clés pour bien utiliser les réseaux sociaux',
+      subtitle: 'Ma formation pour les médias: conseils clés pour bien utiliser les réseaux sociaux',
       lead: [
         'Découvrez les enseignements clés de la formation en ligne que j’ai animée sur les stratégies médiatiques efficaces pour 2025.',
-        'Formats populaires, conseils pour engager l’audience et tendances propres à chaque plateforme : de quoi renforcer votre présence médiatique.',
+        'Formats populaires, conseils pour engager l’audience et tendances propres à chaque plateforme: de quoi renforcer votre présence médiatique.',
       ],
       body: [
-        'J’ai récemment eu l’occasion d’animer une formation en ligne intitulée <strong>« Méthodes efficaces de travail des médias sur les réseaux sociaux »</strong>, organisée par le hub régional de l’Institut de l’information de masse, « MediaBase Tchernihiv ». Nous y avons exploré les tendances et les outils qui façonnent les stratégies sur les réseaux sociaux en 2025.',
-        'L’accent a été mis sur l’évolution de plateformes comme Instagram et Facebook. Sur Instagram, les formats interactifs comme les Reels, les Stories et les carrousels gagnent du terrain. J’ai souligné l’importance des contenus « en temps réel », comme les publications générées par les utilisateurs et les mises à jour en direct, qui favorisent un engagement plus profond. De même, sur Facebook, les vidéos sous-titrées, les stories et les publications textuelles restent de puissants outils pour toucher des publics variés.',
-        'Autre point clé de la formation : le rôle de l’interaction avec l’audience. Répondre aux commentaires, organiser des sondages ou intégrer les suggestions des utilisateurs dans la création de contenu renforce considérablement les liens avec la communauté. Telegram continue par ailleurs d’offrir aux médias des opportunités uniques, notamment les messages vocaux et les sessions vidéo en direct, à ne pas négliger.',
-        'Si vous cherchez des moyens efficaces d’évoluer dans cet environnement dynamique, je serai ravi de partager mon expertise. Vous trouverez ci-dessous la présentation détaillée de la formation ; n’hésitez pas à me contacter via le formulaire pour de futures collaborations.',
+        'J’ai récemment eu l’occasion d’animer une formation en ligne intitulée <strong>«Méthodes efficaces de travail des médias sur les réseaux sociaux»</strong>, organisée par le hub régional de l’Institut de l’information de masse, «MediaBase Tchernihiv». Nous y avons exploré les tendances et les outils qui façonnent les stratégies sur les réseaux sociaux en 2025.',
+        'L’accent a été mis sur l’évolution de plateformes comme Instagram et Facebook. Sur Instagram, les formats interactifs comme les Reels, les Stories et les carrousels gagnent du terrain. J’ai souligné l’importance des contenus «en temps réel», comme les publications générées par les utilisateurs et les mises à jour en direct, qui favorisent un engagement plus profond. De même, sur Facebook, les vidéos sous-titrées, les stories et les publications textuelles restent de puissants outils pour toucher des publics variés.',
+        'Autre point clé de la formation: le rôle de l’interaction avec l’audience. Répondre aux commentaires, organiser des sondages ou intégrer les suggestions des utilisateurs dans la création de contenu renforce considérablement les liens avec la communauté. Telegram continue par ailleurs d’offrir aux médias des opportunités uniques, notamment les messages vocaux et les sessions vidéo en direct, à ne pas négliger.',
+        'Si vous cherchez des moyens efficaces d’évoluer dans cet environnement dynamique, je serai ravi de partager mon expertise. Vous trouverez ci-dessous la présentation détaillée de la formation; n’hésitez pas à me contacter via le formulaire pour de futures collaborations.',
       ],
       dateline: 'Tchernihiv, 28 novembre 2024',
     },
     'work-with-social-media': {
       ...en.pages['work-with-social-media'],
       metaTitle: 'Les médias et les réseaux sociaux en 2025 — Ihor Isychenko',
-      title: 'Comment les médias peuvent travailler avec les réseaux sociaux : défis et opportunités en 2025',
-      kicker: 'Pourquoi est-il important de suivre les tendances comme la vidéo et les stratégies d’engagement ?',
+      title: 'Comment les médias peuvent travailler avec les réseaux sociaux: défis et opportunités en 2025',
+      kicker: 'Pourquoi est-il important de suivre les tendances comme la vidéo et les stratégies d’engagement?',
       subtitle: 'Conseils pour travailler efficacement avec Instagram, Facebook et Telegram en 2025',
       lead: [
-        'Lors d’une formation en ligne destinée aux professionnels des médias, j’ai partagé des stratégies actuelles pour travailler avec les grands réseaux sociaux et gagner en efficacité et en engagement : nouveaux formats de contenu et fonctionnement des algorithmes.',
+        'Lors d’une formation en ligne destinée aux professionnels des médias, j’ai partagé des stratégies actuelles pour travailler avec les grands réseaux sociaux et gagner en efficacité et en engagement: nouveaux formats de contenu et fonctionnement des algorithmes.',
       ],
       body: [
-        'En 2025, les réseaux sociaux restent un outil essentiel pour les médias : une source clé de trafic, de retours et de dialogue avec le public. Lors d’une formation en ligne que j’ai animée pour « Mediabaza Tchernivtsi », hub régional de l’Institut de l’information de masse, j’ai partagé des conseils pour utiliser efficacement Instagram, Facebook et Telegram.',
-        'L’un des points clés abordés était le rôle de la vidéo. La tendance 2025, ce sont les vidéos courtes et dynamiques : Instagram continuera de promouvoir les Reels, tandis que Facebook mettra davantage l’accent sur les vidéos sous-titrées. Il est essentiel de s’adapter, car les plateformes affinent sans cesse leurs algorithmes, et ceux qui ne suivent pas seront distancés.',
-        'Pour obtenir les meilleurs résultats, il faut adopter des approches stratégiques : interagir activement avec les abonnés via les commentaires et les messages, et utiliser les nouveaux outils des plateformes. Par exemple, sur Facebook, mieux vaut éviter les liens externes dans les publications pour ne pas réduire la portée ; sur Telegram, des récapitulatifs hebdomadaires de l’actualité aident à maintenir l’intérêt du public.',
+        'En 2025, les réseaux sociaux restent un outil essentiel pour les médias: une source clé de trafic, de retours et de dialogue avec le public. Lors d’une formation en ligne que j’ai animée pour «Mediabaza Tchernivtsi», hub régional de l’Institut de l’information de masse, j’ai partagé des conseils pour utiliser efficacement Instagram, Facebook et Telegram.',
+        'L’un des points clés abordés était le rôle de la vidéo. La tendance 2025, ce sont les vidéos courtes et dynamiques: Instagram continuera de promouvoir les Reels, tandis que Facebook mettra davantage l’accent sur les vidéos sous-titrées. Il est essentiel de s’adapter, car les plateformes affinent sans cesse leurs algorithmes, et ceux qui ne suivent pas seront distancés.',
+        'Pour obtenir les meilleurs résultats, il faut adopter des approches stratégiques: interagir activement avec les abonnés via les commentaires et les messages, et utiliser les nouveaux outils des plateformes. Par exemple, sur Facebook, mieux vaut éviter les liens externes dans les publications pour ne pas réduire la portée; sur Telegram, des récapitulatifs hebdomadaires de l’actualité aident à maintenir l’intérêt du public.',
       ],
       dateline: 'Tchernivtsi, 11 octobre 2024',
     },
@@ -352,8 +358,8 @@ export default {
   page: { press: 'Communiqué de presse', presentation: 'Présentation' },
   collab: {
     title: 'Je suis toujours ouvert à de nouveaux partenariats et collaborations.',
-    text: 'Si vous recherchez un spécialiste expérimenté de la création de contenu et de la promotion sur les réseaux sociaux, je suis prêt à discuter de vos projets. Mon objectif : vous aider à atteindre de nouveaux sommets grâce à des stratégies efficaces et des solutions créatives.',
-    advTitle: '3 avantages de travailler avec moi :',
+    text: 'Si vous recherchez un spécialiste expérimenté de la création de contenu et de la promotion sur les réseaux sociaux, je suis prêt à discuter de vos projets. Mon objectif: vous aider à atteindre de nouveaux sommets grâce à des stratégies efficaces et des solutions créatives.',
+    advTitle: '3 avantages de travailler avec moi:',
     advantages: [
       {
         title: 'Expertise',
@@ -370,7 +376,7 @@ export default {
     ],
   },
   form: {
-    popupTitle: 'Restons en contact !',
+    popupTitle: 'Restons en contact!',
     popupText: 'Contactez Ihor Isychenko – votre expert de confiance en marketing et en design, prêt à donner vie à vos idées.',
     pageTitle: 'Travaillons ensemble',
     name: 'Votre nom*',
@@ -379,7 +385,7 @@ export default {
     message: 'Votre message*',
     send: 'Envoyer',
     sending: 'Envoi…',
-    okTitle: 'Merci !',
+    okTitle: 'Merci!',
     okText: 'Je vous recontacte très vite.',
     errTitle: 'Impossible d’envoyer le formulaire',
     errText: 'Veuillez réessayer plus tard.',

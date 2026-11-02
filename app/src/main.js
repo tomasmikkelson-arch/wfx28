@@ -184,6 +184,7 @@ if (reduce) {
   ScrollTrigger.batch('.reveal', {
     start: 'top 92%',
     onEnter: (els) => gsap.to(els, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.07, overwrite: true }),
+    onLeave: (els) => gsap.to(els, { opacity: 1, y: 0, duration: 0.3, overwrite: true }),
   });
 
   // Images open up like a mask
@@ -347,5 +348,17 @@ $$('[data-form]').forEach((form) =>
       label.textContent = original;
       btn.disabled = false;
     }
+  })
+);
+
+/* ---------------- YouTube: load the player only on click ---------------- */
+$$('[data-video]').forEach((btn) =>
+  btn.addEventListener('click', () => {
+    const f = document.createElement('iframe');
+    f.src = `https://www.youtube-nocookie.com/embed/${btn.dataset.video}?autoplay=1&rel=0`;
+    f.title = btn.getAttribute('aria-label') || 'YouTube video';
+    f.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    f.allowFullscreen = true;
+    btn.replaceWith(f);
   })
 );
