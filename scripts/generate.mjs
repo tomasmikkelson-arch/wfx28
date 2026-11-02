@@ -1,5 +1,5 @@
 // Generates static, SEO-friendly HTML for every page in every language.
-// Output goes to app/ (Vite root). Run: node scripts/generate.mjs
+// Layout mirrors the original isychenko.com; output goes to app/ (Vite root).
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -11,28 +11,40 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..', 'app');
 const BASE = (process.env.BASE || '/').replace(/\/?$/, '/');
 const dicts = { en, fr };
 
-// Intrinsic sizes of images (prevents layout shift).
-const SIZES = {
-  portrait: [2258, 2977],
-  'training-deck-1': [2354, 2757],
-  'training-deck-2': [2354, 2757],
-  'mediabaza-chernivtsi': [1336, 1336],
-  'mediabaza-chernihiv-sq': [1336, 1336],
-  'online-training': [1921, 2520],
-  'newsroom-cat': [2160, 1332],
-  'hero-golden-gate': [3508, 2480],
+// [intrinsic width, height, available widths]
+const IMG = {
+  hero: [1921, 1336, [900, 1700]],
+  'bio-portrait': [2258, 2978, [600, 1100]],
+  'bio-atwork': [1921, 1337, [700, 1200]],
+  'bio-laptop': [1922, 1336, [700, 1200]],
+  dino: [4622, 2431, [1000, 2000]],
+  'dino-badge': [2481, 2481, [300]],
+  jurassic: [2481, 487, [700]],
+  'news-1': [1337, 1337, [600]],
+  'news-2': [1337, 1337, [600]],
+  'pop-school': [1921, 1337, [700, 1300]],
+  'pop-cefeya': [1922, 1337, [700, 1300]],
+  'pop-6262': [1922, 1337, [700, 1300]],
+  'pop-0372': [1922, 1337, [700, 1300]],
+  'pop-mm': [1922, 1337, [700, 1300]],
+  'eff-hero': [1922, 1337, [700, 1300]],
+  'eff-deck': [2354, 2757, [700, 1300]],
+  'work-hero': [1922, 2521, [700, 1300]],
+  'work-deck': [2354, 2757, [700, 1300]],
 };
-const size = (n) => SIZES[n] || [1921, 1336];
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const asset = (p) => `${BASE}${p}`;
 const svg = (name) => asset(`svg/${name}.svg`);
+const bg = (name, w) => asset(`img/${name}-${w}.webp`);
 
-function img(name, alt, { cls = '', sizes = '(min-width: 900px) 50vw, 100vw', eager = false, extra = '' } = {}) {
-  const [w, h] = size(name);
-  return `<img class="${cls}" src="${asset(`img/${name}-1600.webp`)}" srcset="${asset(`img/${name}-800.webp`)} 800w, ${asset(
-    `img/${name}-1600.webp`
-  )} 1600w" sizes="${sizes}" width="${w}" height="${h}" alt="${esc(alt)}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" ${extra}>`;
+function img(name, alt, { cls = '', sizes = '100vw', eager = false, extra = '' } = {}) {
+  const [w, h, ws] = IMG[name];
+  const largest = ws[ws.length - 1];
+  const srcset = ws.map((x) => `${asset(`img/${name}-${x}.webp`)} ${Math.min(x, w)}w`).join(', ');
+  return `<img class="${cls}" src="${asset(`img/${name}-${largest}.webp`)}" srcset="${srcset}" sizes="${sizes}" width="${w}" height="${h}" alt="${esc(
+    alt
+  )}" ${eager ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async" ${extra}>`;
 }
 
 const pageUrl = (lang, slug = '') => {
@@ -40,20 +52,17 @@ const pageUrl = (lang, slug = '') => {
   return `${BASE}${prefix}${slug ? `${slug}/` : ''}`;
 };
 
-const arrow = `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+const arrow = `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="square"/></svg>`;
 const icons = {
   facebook: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.6V21h3.1z"/></svg>`,
   linkedin: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6.9 8.8H3.8V20h3.1V8.8zM5.3 3.9a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6zM20.2 13.6c0-3-1.6-5-4.4-5-1.4 0-2.4.8-2.8 1.5V8.8H10V20h3.1v-5.6c0-1.5.3-2.9 2.1-2.9 1.8 0 1.8 1.7 1.8 3V20h3.2v-6.4z"/></svg>`,
-  mail: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M3.5 6.5h17v11h-17zM3.5 7l8.5 6.5L20.5 7"/></svg>`,
-  pin: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>`,
-  user: `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="3.8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M4.5 20c.8-3.8 3.9-5.8 7.5-5.8s6.7 2 7.5 5.8" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>`,
+  facebookOutline: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="currentColor" d="M13.4 20.5v-6.2h2.1l.3-2.5h-2.4v-1.6c0-.7.2-1.2 1.2-1.2h1.3V6.8c-.2 0-1-.1-1.9-.1-1.9 0-3.2 1.1-3.2 3.3v1.8H8.7v2.5h2.1v6.2z"/></svg>`,
+  send: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M4 9v10h14M14 4l6 2-2 6M20 6l-9 7"/></svg>`,
+  chevron: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 15 7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
 };
 
-const emailHtml = (cls = '') =>
-  `<a class="js-email ${cls}" data-u="${site.email.user}" data-d="${site.email.domain}" href="#contact">${site.email.user}<span aria-hidden="true">&#64;</span>${site.email.domain}</a>`;
-
-const splitChars = (text) =>
-  [...text].map((c) => (c === ' ' ? ' ' : `<span class="ch">${esc(c)}</span>`)).join('');
+const emailHtml = () =>
+  `<a class="js-email" data-u="${site.email.user}" data-d="${site.email.domain}" href="#contact">${site.email.user}<span aria-hidden="true">&#64;</span>${site.email.domain}</a>`;
 
 // ---------- shared chrome ----------
 function head(t, { title, description, slug = '' }) {
@@ -67,20 +76,21 @@ function head(t, { title, description, slug = '' }) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>${esc(title)}</title>
     <meta name="description" content="${esc(description)}">
+    <meta name="keywords" content="Ihor Isychenko, Marketing, Marketing Director, Graphic Designer, SMM, Social Media Marketing, Marketer, Content Creator, Media expert">
     <meta name="theme-color" content="#7D71F7">
     <meta name="color-scheme" content="light">
     <meta property="og:type" content="website">
     <meta property="og:title" content="${esc(title)}">
     <meta property="og:description" content="${esc(description)}">
     <meta property="og:locale" content="${t.locale}">
-    <meta property="og:image" content="${site.url}/img/portrait-1600.webp">
+    <meta property="og:image" content="${site.url}/img/hero-1700.webp">
     <meta name="twitter:card" content="summary_large_image">
     ${alternates}
     <link rel="alternate" hreflang="x-default" href="${site.url}/${slug ? `${slug}/` : ''}">
     <link rel="icon" type="image/svg+xml" href="${asset('favicon.svg')}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400..900;1,400..700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300..800;1,300..500&display=swap">
     <script>document.documentElement.classList.replace('no-js','js')</script>
     <link rel="stylesheet" href="/src/styles/main.css">
     <script type="module" src="/src/main.js"></script>
@@ -98,12 +108,11 @@ function head(t, { title, description, slug = '' }) {
 
 function header(t, slug = '') {
   const home = pageUrl(t.lang);
-  const link = (hash, label) => `<a href="${home}#${hash}" class="nav__link" data-magnetic>${label}</a>`;
   const langs = site.languages
     .map(
       (l) =>
-        `<a href="${pageUrl(l.code, slug)}" hreflang="${l.code}" lang="${l.code}" class="lang__opt${l.code === t.lang ? ' is-active' : ''}" ${
-          l.code === t.lang ? 'aria-current="true"' : ''
+        `<a href="${pageUrl(l.code, slug)}" hreflang="${l.code}" lang="${l.code}" class="lang__opt${l.code === t.lang ? ' is-active' : ''}"${
+          l.code === t.lang ? ' aria-current="true"' : ''
         } data-lang-link title="${l.name}">${l.label}</a>`
     )
     .join('');
@@ -111,20 +120,16 @@ function header(t, slug = '') {
   <a class="skip" href="#main">${t.nav.skip}</a>
   <div class="progress" aria-hidden="true"><span></span></div>
   <header class="header" data-header>
-    <div class="header__inner container">
-      <a href="${home}" class="logo" aria-label="Ihor Isychenko — home">
-        <img src="${svg('logo-dark')}" alt="ISYCHENKO" width="2512" height="485">
-      </a>
+    <div class="container header__inner">
+      <a href="${home}" class="logo" aria-label="Ihor Isychenko — home"><img src="${svg('logo-purple')}" alt="Isychenko" width="160" height="31"></a>
       <nav class="nav" aria-label="Main">
-        ${link('biography', t.nav.about)}
-        ${link('experience', t.nav.experience)}
-        ${link('media', t.nav.media)}
-        ${link('contact', t.nav.contacts)}
+        <a href="${home}#biography" class="nav__link">${t.nav.about}</a>
+        <a href="${home}#experience" class="nav__link">${t.nav.experience}</a>
+        <a href="${home}#contact" class="nav__link">${t.nav.contacts}</a>
       </nav>
-      <div class="header__actions">
-        <div class="lang" role="group" aria-label="${t.nav.langLabel}"><span class="lang__pill" aria-hidden="true"></span>${langs}</div>
-        <a class="btn btn--sm btn--primary header__cv" href="${site.cv}" target="_blank" rel="noopener">${t.nav.cv}</a>
-        <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="${t.nav.menu}" data-burger><span></span><span></span></button>
+      <div class="header__end">
+        <div class="lang" role="group" aria-label="${t.nav.langLabel}">${langs}</div>
+        <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="${t.nav.menu}" data-burger><span></span><span></span><span></span></button>
       </div>
     </div>
   </header>
@@ -132,361 +137,333 @@ function header(t, slug = '') {
     <nav class="menu__nav" aria-label="Mobile">
       <a href="${home}#biography">${t.nav.about}</a>
       <a href="${home}#experience">${t.nav.experience}</a>
-      <a href="${home}#media">${t.nav.media}</a>
       <a href="${home}#contact">${t.nav.contacts}</a>
-      <a href="${site.cv}" target="_blank" rel="noopener">${t.nav.cv} ${arrow}</a>
     </nav>
-    <div class="menu__foot">${site.socials.map((s) => `<a href="${s.url}" target="_blank" rel="noopener">${s.label}</a>`).join('')}</div>
+    <div class="menu__foot">${site.socials.map((s) => `<a href="${s.url}" target="_blank" rel="noopener" aria-label="${s.label}">${icons[s.id]}</a>`).join('')}</div>
   </div>`;
 }
 
 function footer(t) {
   const home = pageUrl(t.lang);
   return `
-  <footer class="footer">
-    <div class="container footer__grid">
-      <div class="footer__brand">
-        <img src="${svg('logo-purple')}" alt="ISYCHENKO" width="2512" height="485" loading="lazy">
-        <p>${t.footer.tagline}</p>
-        <div class="socials">${site.socials
-          .map((s) => `<a href="${s.url}" target="_blank" rel="noopener" aria-label="${s.label}" data-magnetic>${icons[s.id]}</a>`)
-          .join('')}</div>
-      </div>
-      <div>
-        <h3 class="footer__title">${t.footer.quick}</h3>
-        <ul class="footer__links">
-          <li><a href="${home}#biography">${t.nav.about}</a></li>
-          <li><a href="${home}#experience">${t.nav.experience}</a></li>
-          <li><a href="${home}#contact">${t.nav.contacts}</a></li>
-        </ul>
-      </div>
-      <div>
-        <h3 class="footer__title">${t.footer.contact}</h3>
-        <ul class="footer__info">
-          <li>${icons.user}<span>${t.bio.labels.name}: Ihor Isychenko</span></li>
-          <li>${icons.mail}<span>${t.bio.labels.email}: ${emailHtml()}</span></li>
-          <li>${icons.pin}<span>${t.bio.labels.city}: ${t.bio.city} ${t.bio.region}</span></li>
-        </ul>
-        <a class="btn btn--sm btn--light" href="${site.cv}" target="_blank" rel="noopener">${t.nav.cv} ${arrow}</a>
+  <footer class="footer" id="contact">
+    <div class="footer__main">
+      <div class="container footer__grid">
+        <div class="footer__brand">
+          <img class="footer__logo" src="${svg('logo-dark')}" alt="Isychenko" width="350" height="68" loading="lazy">
+          <p class="footer__tagline">${t.footer.tagline}</p>
+          <div class="footer__socials">${site.socials
+            .map((s) => `<a href="${s.url}" target="_blank" rel="noopener" aria-label="${s.label}" data-magnetic>${icons[s.id]}</a>`)
+            .join('')}</div>
+        </div>
+        <div class="footer__col">
+          <h3 class="footer__title">${t.footer.quick}</h3>
+          <ul class="footer__links">
+            <li><a href="${home}#biography">${t.nav.about}</a></li>
+            <li><a href="${home}#experience">${t.nav.experience}</a></li>
+            <li><a href="${home}#contact" data-popup-open="contact">${t.nav.contacts}</a></li>
+          </ul>
+        </div>
+        <div class="footer__col">
+          <h3 class="footer__title">${t.footer.contact}</h3>
+          <p class="footer__info"><b>${t.bio.labels.name}:</b> Ihor Isychenko<br><b>${t.bio.labels.email}:</b> ${emailHtml()}<br><b>${
+    t.bio.labels.city
+  }:</b> ${t.bio.city}<br>${t.bio.region}</p>
+          <a class="footer__cv" href="${site.cv}" target="_blank" rel="noopener">${t.nav.cv} ${arrow}</a>
+        </div>
       </div>
     </div>
-    <div class="container footer__bottom">
-      <p>Copyright © 2024 - ${new Date().getFullYear()} Ihor Isychenko. ${t.footer.rights}</p>
-      <a href="#top" class="footer__top" data-top>${t.footer.top} ↑</a>
-    </div>
-    <div class="footer__giant" aria-hidden="true">ISYCHENKO</div>
-  </footer>`;
+    <div class="footer__bottom"><p>Copyright © 2024 - ${new Date().getFullYear()} Ihor Isychenko. ${t.footer.rights}</p></div>
+  </footer>
+  <a href="#top" class="to-top" aria-label="${t.nav.top}" data-top>${icons.chevron}</a>`;
 }
 
-function contactBlock(t) {
+function formFields(t, withPhone) {
   return `
-  <section class="contact section" id="contact" aria-labelledby="contact-title">
-    <div class="container contact__grid">
-      <div class="contact__intro">
-        <h2 class="h2 reveal-lines" id="contact-title">${t.collab.title}</h2>
-        <p class="lead reveal">${t.collab.text}</p>
-        <h3 class="contact__adv-title reveal">${t.collab.advTitle}</h3>
-        <ol class="adv">
-          ${t.collab.advantages
-            .map(
-              (a, i) => `<li class="adv__item reveal"><span class="adv__num">0${i + 1}</span><div><h4>${a.title}</h4><p>${a.text}</p></div></li>`
-            )
-            .join('')}
-        </ol>
-      </div>
-      <form class="form reveal" data-form data-endpoint="${site.formEndpoint}" novalidate>
-        <h3 class="form__title">${t.form.title}</h3>
         <input type="hidden" name="_subject" value="New message from isychenko.com">
         <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
-        <label class="field"><input name="name" type="text" required autocomplete="name" placeholder=" "><span>${t.form.name}</span></label>
-        <label class="field"><input name="email" type="email" required autocomplete="email" placeholder=" "><span>${t.form.email}</span></label>
-        <label class="field"><textarea name="message" rows="4" required placeholder=" "></textarea><span>${t.form.message}</span></label>
-        <button class="btn btn--primary btn--block" type="submit" data-sending="${t.form.sending}"><span>${t.form.send}</span> ${arrow}</button>
-        <div class="form__direct">${icons.mail} ${emailHtml()}</div>
+        <label class="field"><span>${t.form.name}</span><input name="name" type="text" required autocomplete="name" placeholder="${t.form.name}"></label>
+        ${withPhone ? `<label class="field"><span>${t.form.phone}</span><input name="phone" type="tel" autocomplete="tel" placeholder="${t.form.phone}"></label>` : ''}
+        <label class="field"><span>${t.form.email}</span><input name="email" type="email" required autocomplete="email" placeholder="${t.form.email}"></label>
+        <label class="field"><span>${t.form.message}</span><textarea name="message" rows="5" required placeholder="${t.form.message}"></textarea></label>
+        <button class="btn btn--dark btn--block" type="submit" data-sending="${t.form.sending}">${icons.send}<span>${t.form.send}</span></button>`;
+}
+
+function popups(t, withExp) {
+  const expPopups = withExp
+    ? t.experience.items
+        .filter((e) => e.popup)
+        .map(
+          (e) => `
+  <dialog class="popup" id="popup-${e.id}" aria-labelledby="popup-${e.id}-title">
+    <div class="popup__frame">
+      <button class="popup__close" type="button" data-close aria-label="${t.nav.close}">✕</button>
+      <article class="popup__card">
+        <h2 class="popup__title" id="popup-${e.id}-title">${e.role}</h2>
+        <p class="popup__sub">${e.popup.org} ${t.experience.workExp}</p>
+        <div class="popup__img">${img(e.popup.image, e.company, { sizes: '(min-width: 700px) 520px, 90vw' })}</div>
+        <div class="popup__body">
+          ${e.popup.blocks
+            .map((b) => (b.h ? `<h3>${b.h}</h3>` : b.p ? `<p>${b.p}</p>` : `<ul>${b.li.map((x) => `<li>${x}</li>`).join('')}</ul>`))
+            .join('\n          ')}
+        </div>
+      </article>
+    </div>
+  </dialog>`
+        )
+        .join('')
+    : '';
+  return `${expPopups}
+  <dialog class="popup" id="popup-contact" aria-labelledby="popup-contact-title">
+    <div class="popup__frame">
+      <button class="popup__close" type="button" data-close aria-label="${t.nav.close}">✕</button>
+      <form class="popup__card form" data-form data-endpoint="${site.formEndpoint}" novalidate>
+        <h2 class="popup__title" id="popup-contact-title">${t.form.popupTitle}</h2>
+        <p class="popup__sub">${t.form.popupText}</p>
+        ${formFields(t, false)}
       </form>
     </div>
-  </section>
-  <dialog class="modal modal--status" data-status-modal aria-labelledby="status-title">
-    <div class="modal__box modal__box--sm">
+  </dialog>
+  <dialog class="popup popup--status" data-status-modal aria-labelledby="status-title">
+    <div class="popup__card popup__card--sm">
       <div class="status__icon" data-status-icon></div>
-      <h3 id="status-title" data-status-title data-ok="${esc(t.form.okTitle)}" data-err="${esc(t.form.errTitle)}"></h3>
-      <p data-status-text data-ok="${esc(t.form.okText)}" data-err="${esc(t.form.errText)}"></p>
-      <button class="btn btn--primary" type="button" data-close>${t.form.ok}</button>
+      <h2 class="popup__title" id="status-title" data-status-title data-ok="${esc(t.form.okTitle)}" data-err="${esc(t.form.errTitle)}"></h2>
+      <p class="popup__sub" data-status-text data-ok="${esc(t.form.okText)}" data-err="${esc(t.form.errText)}"></p>
+      <button class="btn btn--dark" type="button" data-close>${t.form.ok}</button>
     </div>
   </dialog>`;
 }
 
-const lightbox = (t) => `
-  <dialog class="modal modal--lightbox" data-lightbox aria-label="Image">
-    <button class="modal__close" type="button" data-close aria-label="${t.nav.close}">✕</button>
-    <img data-lightbox-img alt="">
-  </dialog>`;
+const roundBtn = (label, attrs, cls = '') =>
+  `<button type="button" class="round-btn ${cls}" ${attrs} data-magnetic><span class="round-btn__circle">${arrow}</span><span class="round-btn__label">${label}</span></button>`;
 
 // ---------- home ----------
 function home(t) {
-  const decor = (name, cls, depth) =>
-    `<img src="${svg(name)}" class="float ${cls}" data-depth="${depth}" alt="" aria-hidden="true" width="120" height="120">`;
-  const marqueeItems = t.marquee
-    .map((m) => `<span>${m}</span><img src="${svg('sparkle')}" alt="" aria-hidden="true" width="40" height="48">`)
-    .join('');
-
+  const ringText = (t.hero.ring + t.hero.ring).trim();
   const exp = t.experience.items
     .map(
-      (e, i) => `
-        <li class="exp__item reveal" data-preview="${asset(`img/${e.image}-800.webp`)}">
-          <button class="exp__row" type="button" data-modal-open="exp-${e.id}" aria-haspopup="dialog">
-            <span class="exp__idx">${String(i + 1).padStart(2, '0')}</span>
-            <span class="exp__main">
-              <span class="exp__role">${e.role}</span>
-              <span class="exp__company">${e.company}</span>
-            </span>
-            <span class="exp__meta"><span>${e.period}</span><span>${e.place}</span></span>
-            <span class="exp__more">${t.experience.details} ${arrow}</span>
-          </button>
-          <template id="exp-${e.id}">
-            <div class="modal__media">${img(e.image, e.company, { sizes: '(min-width: 900px) 45vw, 100vw' })}</div>
-            <div class="modal__content">
-              <p class="kicker">${e.period} · ${e.place}</p>
-              <h3 class="modal__title">${e.role}</h3>
-              <p class="modal__company">${e.company}</p>
-              ${e.body.map((p) => `<p>${p}</p>`).join('')}
-            </div>
-          </template>
+      (e) => `
+        <li class="tl__item">
+          <div class="tl__meta reveal">
+            <p class="tl__company">${e.company}</p>
+            <p class="tl__date">${e.period}<br>${e.place}</p>
+          </div>
+          <div class="tl__dot" aria-hidden="true"><span></span></div>
+          <div class="tl__content">
+            <h3 class="tl__role reveal">${e.role}</h3>
+            ${e.body.map((p) => `<p class="reveal">${p}</p>`).join('')}
+            ${
+              e.popup
+                ? `<button type="button" class="tl__details reveal" data-popup-open="${e.id}" aria-haspopup="dialog">${t.experience.details}</button>`
+                : `<span class="tl__details tl__details--muted reveal">${t.experience.details}</span>`
+            }
+          </div>
         </li>`
     )
     .join('');
+  const colors = ['purple', 'dark', 'yellow', 'red'];
 
   return `
   <main id="main">
     <section class="hero" id="top" aria-labelledby="hero-title">
-      <div class="hero__bg" aria-hidden="true">
-        <span class="blob blob--1"></span><span class="blob blob--2"></span>
-        <span class="ring ring--1" data-depth="0.2"></span><span class="ring ring--2" data-depth="0.4"></span>
-        <span class="dot dot--yellow" data-depth="0.6"></span>
-      </div>
-      <div class="container hero__grid">
-        <div class="hero__text">
-          <p class="hero__hello" data-hero-fade>${t.hero.hello}</p>
-          <h1 class="hero__title" id="hero-title">
-            <span class="line">${splitChars('Ihor')}</span>
-            <span class="line line--accent">${splitChars('Isychenko')}</span>
-          </h1>
-          <p class="hero__role" data-hero-fade>${t.hero.role.split('|').map((s) => `<span>${s.trim()}</span>`).join('<i>/</i>')}</p>
-          <p class="hero__tagline" data-hero-fade>${t.hero.tagline}</p>
-          <div class="hero__cta" data-hero-fade>
-            <a class="btn btn--primary btn--lg" href="#contact" data-magnetic>${t.hero.cta} ${arrow}</a>
-            <a class="btn btn--ghost btn--lg" href="${site.cv}" target="_blank" rel="noopener" data-magnetic>${t.hero.cta2}</a>
-          </div>
+      <div class="hero__bg" data-parallax="0.25" style="background-image:url(${bg('bg-hero', 2400)})"></div>
+      <div class="container hero__stage">
+        <aside class="hero__follow" aria-label="${t.hero.follow}">
+          <span class="hero__line" aria-hidden="true"></span>
+          ${site.socials
+            .map(
+              (s) =>
+                `<a href="${s.url}" target="_blank" rel="noopener" aria-label="${s.label}" data-magnetic>${s.id === 'facebook' ? icons.facebookOutline : icons.linkedin}</a>`
+            )
+            .join('')}
+          <span class="hero__follow-text">${t.hero.follow}</span>
+        </aside>
+        <div class="hero__photo" data-hero-photo>
+          ${img('hero', 'Ihor Isychenko', { sizes: '(min-width: 1100px) 846px, 92vw', eager: true })}
         </div>
-        <div class="hero__visual" data-hero-visual>
-          <div class="hero__frame">
-            ${img('portrait', 'Ihor Isychenko', { cls: 'hero__photo', sizes: '(min-width: 900px) 40vw, 90vw', eager: true })}
-          </div>
-          <img src="${svg('dino-badge')}" class="hero__badge" alt="Graphic Dinosaur" width="200" height="200">
-          ${decor('like', 'float--like', 1.2)}
-          ${decor('heart', 'float--heart', 0.8)}
-          ${decor('care', 'float--care', 1)}
-          ${decor('chat', 'float--chat', 0.6)}
-          ${decor('click', 'float--click', 1.4)}
-          <img src="${svg('sparkle')}" class="float float--sparkle" data-depth="0.5" alt="" aria-hidden="true" width="80" height="97">
-          <div class="hero__chip" data-depth="0.3">${icons.pin}<span>${t.hero.location}</span></div>
-        </div>
+        <button type="button" class="hero__ring" data-popup-open="contact" aria-label="${esc(t.hero.ring)}" data-magnetic>
+          <svg viewBox="0 0 200 200" aria-hidden="true"><defs><path id="ringPath" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0"/></defs>
+            <text><textPath href="#ringPath">${esc(ringText)}</textPath></text></svg>
+          <span class="hero__ring-circle"></span>
+        </button>
       </div>
-      <a href="#biography" class="hero__scroll" aria-label="${t.hero.scroll}"><span></span>${t.hero.scroll}</a>
+      <div class="container hero__name">
+        <h1 class="hero__title" id="hero-title"><span class="hero__first">${t.hero.first}</span> <span class="hero__last">${t.hero.last}</span></h1>
+        ${roundBtn(t.hero.write, 'data-popup-open="contact" aria-haspopup="dialog"', 'hero__write')}
+      </div>
+      <p class="hero__role container" data-hero-fade>${t.hero.role}</p>
+      <div class="container hero__frame-wrap"><div class="hero__frame" aria-hidden="true"></div></div>
     </section>
 
-    <div class="marquee" aria-hidden="true"><div class="marquee__track">${marqueeItems}${marqueeItems}</div></div>
-
-    <section class="bio section" id="biography" aria-labelledby="bio-title">
+    <section class="bio" id="biography" aria-labelledby="bio-title">
+      <span class="bio__arc" aria-hidden="true"></span>
       <div class="container bio__grid">
-        <div class="bio__media">
-          <div class="bio__img parallax">${img('golden-gate', 'Ihor Isychenko in San Francisco', { sizes: '(min-width: 900px) 45vw, 100vw' })}</div>
-          <img src="${svg('card')}" class="bio__sticker" alt="" aria-hidden="true" width="120" height="108">
+        <div class="bio__side">
+          <div class="bio__block reveal">
+            <h3 class="bio__label"><img src="${svg('card')}" alt="" width="24" height="22">${t.bio.personalTitle}</h3>
+            <p class="bio__info"><b>${t.bio.labels.name}:</b> ${t.bio.name}<br><b>${t.bio.labels.email}:</b> ${emailHtml()}<br><b>${t.bio.labels.city}:</b> ${
+    t.bio.city
+  }<br>${t.bio.region}</p>
+          </div>
+          <div class="bio__block reveal">
+            <h3 class="bio__label"><img src="${svg('click')}" alt="" width="22" height="22">${t.bio.skillsTitle}</h3>
+            <ul class="bio__list">${t.bio.skills.map((s) => `<li>${s}</li>`).join('')}</ul>
+            <ul class="bio__list">${t.bio.tools.map((s) => `<li>${s}</li>`).join('')}</ul>
+          </div>
         </div>
-        <div class="bio__text">
-          <p class="kicker reveal">${t.bio.kicker}</p>
-          <h2 class="h2 reveal-lines" id="bio-title">${t.bio.title}</h2>
-          <p class="bio__lead scrub-words">${t.bio.lead}</p>
-          ${t.bio.paragraphs.map((p) => `<p class="reveal">${p}</p>`).join('')}
+        <div class="bio__main">
+          <h2 class="section-title section-title--light reveal-lines" id="bio-title">${t.bio.title}</h2>
+          <hr class="dashed dashed--light">
+          <p class="bio__text reveal"><b>${t.bio.lead}</b>${t.bio.leadRest}</p>
+          ${t.bio.paragraphs.map((p) => `<p class="bio__text reveal">${p}</p>`).join('')}
+          <div class="bio__photos">
+            <div class="bio__photo bio__photo--tall reveal-img">${img('bio-portrait', 'Ihor Isychenko', { sizes: '(min-width: 900px) 373px, 50vw' })}</div>
+            <div class="bio__photo reveal-img">${img('bio-atwork', 'Ihor Isychenko', { sizes: '(min-width: 900px) 331px, 50vw' })}</div>
+            <div class="bio__photo reveal-img">${img('bio-laptop', 'Ihor Isychenko', { sizes: '(min-width: 900px) 331px, 50vw' })}</div>
+          </div>
         </div>
-      </div>
-      <div class="container info">
-        <article class="info__card info__card--personal reveal">
-          <h3>${t.bio.personalTitle}</h3>
-          <dl>
-            <div><dt>${t.bio.labels.name}</dt><dd>${t.bio.name}</dd></div>
-            <div><dt>${t.bio.labels.email}</dt><dd>${emailHtml()}</dd></div>
-            <div><dt>${t.bio.labels.city}</dt><dd>${t.bio.city}<br><small>${t.bio.region}</small></dd></div>
-          </dl>
-        </article>
-        <article class="info__card info__card--skills reveal">
-          <h3>${t.bio.skillsTitle}</h3>
-          <ul class="chips">${t.bio.skills.map((s) => `<li>${s}</li>`).join('')}</ul>
-        </article>
-        <article class="info__card info__card--tools reveal">
-          <h3>${t.bio.toolsTitle}</h3>
-          <ul class="chips chips--dark">${t.bio.tools.map((s) => `<li>${s}</li>`).join('')}</ul>
-        </article>
       </div>
     </section>
 
-    <section class="numbers section" aria-labelledby="numbers-title">
+    <section class="numbers" aria-labelledby="numbers-title">
       <div class="container numbers__grid">
         <div class="numbers__head">
-          <h2 class="h2 reveal-lines" id="numbers-title">${t.numbers.title[0]} <em>${t.numbers.title[1]}</em></h2>
-          <p class="reveal">${t.numbers.text}</p>
+          <h2 class="numbers__title reveal-lines" id="numbers-title"><b>${t.numbers.titleBold}</b> ${t.numbers.titleRest}</h2>
+          <p class="numbers__text reveal">${t.numbers.text}</p>
         </div>
-        <ul class="numbers__list">
+        <ul class="numbers__cards">
           ${t.numbers.items
             .map(
-              (n) =>
-                `<li class="stat reveal"><span class="stat__value"><span data-count="${n.value}">${n.value}</span>${n.suffix}</span><span class="stat__label">${n.label}</span></li>`
+              (n, i) => `<li class="stat stat--${colors[i]} reveal" data-tilt>
+              <div class="stat__top"><span class="stat__value"><span data-count="${n.value}">${n.value}</span>${n.suffix}</span>${
+                n.head ? `<span class="stat__head">${n.head}</span>` : ''
+              }</div>
+              <span class="stat__rule"></span>
+              <span class="stat__label">${n.label}</span></li>`
             )
             .join('')}
         </ul>
       </div>
     </section>
 
-    <section class="exp section" id="experience" aria-labelledby="exp-title">
+    <div class="band" aria-hidden="true"><div class="band__track">${Array(8)
+      .fill(`<span>${t.hero.role}</span><img src="${svg('sparkle')}" alt="" width="24" height="29">`)
+      .join('')}</div></div>
+
+    <section class="exp" id="experience" aria-labelledby="exp-title">
       <div class="container">
-        <div class="section__head">
-          <p class="kicker reveal">${t.experience.kicker}</p>
-          <h2 class="h2 reveal-lines" id="exp-title">${t.experience.title}</h2>
+        <div class="exp__head">
+          <h2 class="section-title reveal-lines" id="exp-title">${t.experience.title}</h2>
+          <hr class="dashed">
         </div>
-        <ol class="exp__list">${exp}</ol>
+        <ol class="tl" data-timeline><span class="tl__progress" aria-hidden="true"></span>${exp}</ol>
       </div>
-      <div class="exp__preview" aria-hidden="true"><img alt=""></div>
     </section>
 
-    <section class="connect" aria-labelledby="connect-title">
+    <section class="dino" aria-labelledby="dino-title">
+      <div class="dino__bg" data-parallax="0.2" style="background-image:url(${bg('bg-dino', 2400)})"></div>
+      <div class="dino__grid container">
+        <div class="dino__art">
+          ${img('dino', 'Graphic Dinosaur', { cls: 'dino__img', sizes: '(min-width: 900px) 1160px, 120vw' })}
+          ${img('dino-badge', 'Graphic Dinosaur', { cls: 'dino__badge', sizes: '84px' })}
+          ${img('jurassic', t.dino.pill, { cls: 'dino__pill', sizes: '300px' })}
+        </div>
+        <div class="dino__text">
+          ${roundBtn(t.dino.connect, 'data-popup-open="contact" aria-haspopup="dialog"', 'round-btn--outline')}
+          <h2 class="dino__title reveal" id="dino-title">${t.dino.title}</h2>
+          <p class="dino__lead reveal">${t.dino.text}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="news" id="media" aria-labelledby="news-title">
+      <div class="news__bg" style="background-image:url(${bg('bg-news', 2400)})"></div>
       <div class="container">
-        <div class="connect__card reveal">
-          <img src="${svg('sparkle')}" class="connect__spark" alt="" aria-hidden="true" width="80" height="97">
-          <h2 class="connect__title" id="connect-title">${t.connect.title}</h2>
-          <p>${t.connect.text}</p>
-          <a class="btn btn--light btn--lg" href="#contact" data-magnetic>${t.connect.cta} ${arrow}</a>
+        <div class="news__head">
+          <h2 class="section-title reveal-lines" id="news-title">${t.media.title[0]} <span class="amp">${t.media.title[1]}</span> ${t.media.title[2]}</h2>
+          <hr class="dashed">
+        </div>
+        <div class="news__grid">
+          <div class="news__side">
+            <h3 class="news__kicker reveal"><img src="${svg('chat')}" alt="" width="24" height="24">${t.media.kicker}</h3>
+            <ol class="news__links">
+              ${t.media.items
+                .map((m, i) => `<li class="reveal"><span>0${i + 1}.</span><a href="${m.url}" target="_blank" rel="noopener">${m.title}</a></li>`)
+                .join('')}
+            </ol>
+            <a class="news__more reveal" href="${t.media.items[0].url}" target="_blank" rel="noopener" aria-label="${t.media.kicker}" data-magnetic>${arrow}</a>
+          </div>
+          <div class="news__list">
+            ${t.trainings.items
+              .map(
+                (tr) => `<article class="training">
+                <a class="training__img reveal-img" href="${pageUrl(t.lang, tr.slug)}" tabindex="-1" aria-hidden="true">${img(tr.image, tr.alt, {
+                  sizes: '(min-width: 900px) 249px, 90vw',
+                })}</a>
+                <div class="training__body">
+                  <h3 class="training__title reveal">${tr.title}</h3>
+                  <p class="training__text reveal">${tr.text}</p>
+                  <a class="btn btn--dark reveal" href="${pageUrl(t.lang, tr.slug)}" data-magnetic>${t.trainings.seeDetails}</a>
+                </div>
+              </article>`
+              )
+              .join('')}
+          </div>
         </div>
       </div>
     </section>
-
-    <section class="gallery" aria-labelledby="gallery-title">
-      <div class="container section__head">
-        <p class="kicker reveal">${t.gallery.kicker}</p>
-        <h2 class="h2 reveal-lines" id="gallery-title">${t.gallery.title}</h2>
-      </div>
-      <div class="gallery__pin">
-        <ul class="gallery__track">
-          ${site.gallery
-            .map(
-              (g) =>
-                `<li class="gallery__item"><button type="button" data-lightbox-open="${asset(`img/${g}-1600.webp`)}" aria-label="Open image">${img(g, '', {
-                  sizes: '(min-width: 900px) 40vw, 80vw',
-                })}</button></li>`
-            )
-            .join('')}
-        </ul>
-      </div>
-    </section>
-
-    <section class="media section" id="media" aria-labelledby="media-title">
-      <div class="container media__grid">
-        <div class="media__head">
-          <h2 class="media__title reveal-lines" id="media-title">${t.media.title[0]} <span>${t.media.title[1]}</span> ${t.media.title[2]}</h2>
-          <p class="kicker reveal">${t.media.kicker}</p>
-        </div>
-        <ul class="articles">
-          ${t.media.items
-            .map(
-              (m, i) => `<li class="reveal"><a class="article" href="${m.url}" target="_blank" rel="noopener">
-                <span class="article__num">0${i + 1}.</span>
-                <span class="article__title">${m.title}</span>
-                <span class="article__src">${m.source}</span>
-                <span class="article__arrow">${arrow}</span></a></li>`
-            )
-            .join('')}
-        </ul>
-      </div>
-      <div class="container trainings">
-        <div class="section__head">
-          <p class="kicker reveal">${t.trainings.kicker}</p>
-          <h2 class="h2 reveal-lines">${t.trainings.title}</h2>
-        </div>
-        <div class="trainings__grid">
-          ${t.trainings.items
-            .map(
-              (tr) => `<a class="training reveal" href="${pageUrl(t.lang, tr.slug)}" data-tilt>
-              <span class="training__img">${img(tr.image, tr.title, { sizes: '(min-width: 900px) 40vw, 100vw' })}</span>
-              <span class="training__body">
-                <span class="training__num">${tr.num}</span>
-                <span class="training__title">${tr.title}</span>
-                <span class="training__text">${tr.text}</span>
-                <span class="btn btn--sm btn--primary">${t.trainings.seeDetails} ${arrow}</span>
-              </span></a>`
-            )
-            .join('')}
-        </div>
-      </div>
-    </section>
-
-    ${contactBlock(t)}
-  </main>
-  <dialog class="modal modal--exp" data-exp-modal aria-label="${t.experience.details}">
-    <div class="modal__box">
-      <button class="modal__close" type="button" data-close aria-label="${t.nav.close}">✕</button>
-      <div class="modal__body" data-exp-body></div>
-    </div>
-  </dialog>
-  ${lightbox(t)}`;
+  </main>`;
 }
 
 // ---------- training page ----------
 function training(t, slug) {
   const p = t.pages[slug];
-  const other = t.trainings.items.find((x) => x.slug !== slug);
-  return `
-  <main id="main" class="page">
-    <section class="page__hero">
-      <div class="hero__bg" aria-hidden="true"><span class="blob blob--1"></span><span class="ring ring--1" data-depth="0.3"></span><span class="dot dot--yellow" data-depth="0.6"></span></div>
-      <div class="container">
-        <a class="back" href="${pageUrl(t.lang)}#media">← ${t.page.back}</a>
-        <p class="kicker" data-hero-fade>${p.kicker}</p>
-        <h1 class="page__title reveal-lines" data-instant>${p.title}</h1>
-        <div class="page__lead" data-hero-fade>${p.lead.map((l, i) => `<p${i === 0 ? ' class="lead"' : ''}>${l}</p>`).join('')}</div>
-      </div>
-    </section>
-    <section class="collage container">
-      ${p.images
-        .map(
-          (im, i) =>
-            `<button type="button" class="collage__item collage__item--${i + 1} reveal" data-lightbox-open="${asset(`img/${im}-1600.webp`)}" aria-label="Open image">${img(
-              im,
-              p.title,
-              { sizes: '(min-width: 900px) 33vw, 100vw' }
-            )}</button>`
-        )
-        .join('')}
-    </section>
-    <article class="article-body container">
-      <div class="article-body__text">
+  const heroImg = `<div class="phero__img reveal-img">${img(p.heroImage, p.title, { sizes: '(min-width: 900px) 555px, 92vw', eager: true })}</div>`;
+  const heroText = `<div class="phero__text"><h1 class="phero__title reveal-lines" data-instant>${p.title}</h1>${
+    p.kicker ? `<p class="phero__kicker" data-hero-fade>${p.kicker}</p>` : ''
+  }</div>`;
+  const deck = `<div class="article__deck reveal-img">${img(p.deck, 'Media Training Ihor Isychenko', { sizes: '(min-width: 900px) 570px, 92vw' })}</div>`;
+  const text = `<div class="article__text">
         ${p.body.map((b) => `<p class="reveal">${b}</p>`).join('')}
-        <p class="dateline reveal">${icons.pin} ${p.dateline}</p>
-        <div class="article-body__cta reveal">
-          <a class="btn btn--primary" href="${p.press}" target="_blank" rel="noopener" data-magnetic>${t.page.press} ${arrow}</a>
-          <a class="btn btn--ghost" href="${p.presentation}" target="_blank" rel="noopener" data-magnetic>${t.page.presentation} ${arrow}</a>
+        <p class="article__date reveal">${p.dateline}</p>
+        <div class="article__cta reveal">
+          <a class="btn btn--dark" href="${p.press}" target="_blank" rel="noopener" data-magnetic>${t.page.press}</a>
+          <a class="btn btn--outline" href="${p.presentation}" target="_blank" rel="noopener" data-magnetic>${t.page.presentation}</a>
+        </div>
+      </div>`;
+  return `
+  <main id="main" class="page page--${p.theme}">
+    <section class="phero" id="top">
+      <div class="phero__bg" data-parallax="0.2" style="background-image:url(${bg(p.theme === 'purple' ? 'bg-purple' : 'bg-yellow', 2600)})"></div>
+      <div class="container phero__grid${p.heroImageLeft ? '' : ' phero__grid--rev'}">${p.heroImageLeft ? heroImg + heroText : heroText + heroImg}</div>
+    </section>
+    <section class="article container">
+      <div class="article__intro">
+        <h2 class="article__subtitle reveal-lines">${p.subtitle}</h2>
+        ${p.lead.map((l) => `<p class="reveal">${l}</p>`).join('')}
+      </div>
+      <div class="article__grid${p.deckLeft ? ' article__grid--rev' : ''}">${p.deckLeft ? deck + text : text + deck}</div>
+    </section>
+    <section class="collab" id="contact-form">
+      <div class="collab__bg" style="background-image:url(${bg('bg-dino', 2400)})"></div>
+      <div class="container collab__grid">
+        <form class="collab__form form reveal" data-form data-endpoint="${site.formEndpoint}" novalidate>
+          <h2 class="collab__form-title">${t.form.pageTitle}</h2>
+          ${formFields(t, true)}
+        </form>
+        <div class="collab__text">
+          <p class="collab__title reveal">${t.collab.title}</p>
+          <p class="reveal">${t.collab.text}</p>
+          <p class="collab__adv-title reveal">${t.collab.advTitle}</p>
+          <ol class="adv">
+            ${t.collab.advantages
+              .map((a, i) => `<li class="adv__item reveal"><span class="adv__num">0${i + 1}</span><div><h3>${a.title}</h3><p>${a.text}</p></div></li>`)
+              .join('')}
+          </ol>
         </div>
       </div>
-      <aside class="article-body__aside reveal">
-        <p class="kicker">${t.page.more}</p>
-        <a class="training training--mini" href="${pageUrl(t.lang, other.slug)}" data-tilt>
-          <span class="training__img">${img(other.image, other.title, { sizes: '(min-width: 900px) 25vw, 100vw' })}</span>
-          <span class="training__body"><span class="training__num">${other.num}</span><span class="training__title">${other.title}</span>
-          <span class="btn btn--sm btn--primary">${t.trainings.seeDetails} ${arrow}</span></span>
-        </a>
-      </aside>
-    </article>
-    ${contactBlock(t)}
-  </main>
-  ${lightbox(t)}`;
+    </section>
+  </main>`;
 }
 
 // ---------- write ----------
@@ -505,7 +482,7 @@ for (const lang of Object.keys(dicts)) {
     write(
       `${prefix}index.html`,
       `${head(t, { title: t.meta.title, description: t.meta.description })}
-<body data-page="home">${header(t)}${home(t)}${footer(t)}
+<body data-page="home">${header(t)}${home(t)}${footer(t)}${popups(t, true)}
 </body></html>`
     )
   );
@@ -515,13 +492,12 @@ for (const lang of Object.keys(dicts)) {
       write(
         `${prefix}${slug}/index.html`,
         `${head(t, { title: p.metaTitle, description: p.lead.join(' '), slug })}
-<body data-page="training">${header(t, slug)}${training(t, slug)}${footer(t)}
+<body data-page="training">${header(t, slug)}${training(t, slug)}${footer(t)}${popups(t, false)}
 </body></html>`
       )
     );
   }
 }
-// 404 page for GitHub Pages: redirect unknown paths home.
 write(
   'public/404.html',
   `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Page not found — Ihor Isychenko</title><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="3;url=${BASE}"><style>body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:Montserrat,system-ui,sans-serif;background:#7D71F7;color:#fff;text-align:center}a{color:#fff}</style></head><body><div><h1 style="font-size:clamp(4rem,15vw,10rem);margin:0">404</h1><p><a href="${BASE}">isychenko.com →</a></p></div></body></html>`

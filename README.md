@@ -2,7 +2,7 @@
 
 Modern rebuild of [isychenko.com](https://isychenko.com/): static, fast, animated, bilingual (EN / FR).
 
-**Live:** https://tomasmikkelson-arch.github.io/wfx28/
+**Live:** https://tomasmikkelson-arch.github.io/wfx28/ — same structure, texts, photos and popups as isychenko.com, rebuilt with modern animation.
 
 ## Stack
 - [Vite](https://vitejs.dev/) — build & dev server (multi-page, static HTML per language for SEO)

@@ -12,24 +12,22 @@ const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matc
 /* ---------------- smooth scroll ---------------- */
 let lenis = null;
 if (!reduce) {
-  lenis = new Lenis({ lerp: 0.1, wheelMultiplier: 1 });
+  lenis = new Lenis({ lerp: 0.1 });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add((t) => lenis.raf(t * 1000));
   gsap.ticker.lagSmoothing(0);
 }
 const scrollTo = (target) => {
-  const el = typeof target === 'string' ? $(target) : target;
-  if (!el && target !== 0) return;
-  if (lenis) lenis.scrollTo(el ?? 0, { offset: -70, duration: 1.3 });
-  else (el ? el.scrollIntoView({ behavior: 'smooth' }) : window.scrollTo({ top: 0, behavior: 'smooth' }));
+  if (lenis) lenis.scrollTo(target, { offset: -70, duration: 1.3 });
+  else if (target === 0) window.scrollTo({ top: 0, behavior: 'smooth' });
+  else target.scrollIntoView({ behavior: 'smooth' });
 };
 
-// In-page anchors
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a[href]');
-  if (!a) return;
+  if (!a || a.hasAttribute('data-popup-open') || a.hasAttribute('data-lang-link')) return;
   const url = new URL(a.href, location.href);
-  if (url.pathname === location.pathname && url.hash && !a.hasAttribute('data-lang-link')) {
+  if (url.pathname === location.pathname && url.hash) {
     const el = url.hash === '#top' ? 0 : $(url.hash);
     if (el === null) return;
     e.preventDefault();
@@ -38,16 +36,12 @@ document.addEventListener('click', (e) => {
     history.replaceState(null, '', url.hash === '#top' ? location.pathname : url.hash);
   }
 });
-// Arriving with a hash (e.g. from a subpage)
-if (location.hash && $(location.hash)) {
-  window.addEventListener('load', () => setTimeout(() => scrollTo(location.hash), 150));
-}
+if (location.hash && $(location.hash)) window.addEventListener('load', () => setTimeout(() => scrollTo($(location.hash)), 200));
 
-/* ---------------- language switch keeps your place ---------------- */
+/* language switch keeps your place */
 $$('[data-lang-link]').forEach((a) =>
   a.addEventListener('click', () => {
     try {
-      localStorage.setItem('lang', a.hreflang);
       sessionStorage.setItem('restoreY', String(window.scrollY));
     } catch {}
   })
@@ -60,15 +54,14 @@ try {
   }
 } catch {}
 
-/* ---------------- header, progress, menu ---------------- */
+/* ---------------- header, progress, to-top, menu ---------------- */
 const header = $('[data-header]');
 const progress = $('.progress span');
-let lastY = 0;
+const toTop = $('[data-top]');
 const onScroll = () => {
   const y = window.scrollY;
   header.classList.toggle('is-scrolled', y > 20);
-  header.classList.toggle('is-hidden', y > 400 && y > lastY && !document.body.classList.contains('menu-open'));
-  lastY = y;
+  toTop?.classList.toggle('is-visible', y > 600);
   const h = document.documentElement.scrollHeight - innerHeight;
   if (progress) progress.style.transform = `scaleX(${h > 0 ? y / h : 0})`;
 };
@@ -82,7 +75,7 @@ function closeMenu() {
   document.body.classList.remove('menu-open');
   burger.setAttribute('aria-expanded', 'false');
   lenis?.start();
-  setTimeout(() => (menu.hidden = true), 400);
+  setTimeout(() => (menu.hidden = true), 500);
 }
 burger?.addEventListener('click', () => {
   if (document.body.classList.contains('menu-open')) return closeMenu();
@@ -90,18 +83,18 @@ burger?.addEventListener('click', () => {
   requestAnimationFrame(() => document.body.classList.add('menu-open'));
   burger.setAttribute('aria-expanded', 'true');
   lenis?.stop();
-  if (!reduce) gsap.from('.menu__nav a', { y: 60, opacity: 0, stagger: 0.06, duration: 0.7, ease: 'power3.out', delay: 0.15 });
+  if (!reduce) gsap.from('.menu__nav a', { y: 50, opacity: 0, stagger: 0.07, duration: 0.7, ease: 'power3.out', delay: 0.2 });
 });
 document.addEventListener('keydown', (e) => e.key === 'Escape' && closeMenu());
 
-/* ---------------- obfuscated email ---------------- */
+/* obfuscated email */
 $$('.js-email').forEach((a) => {
   const mail = `${a.dataset.u}@${a.dataset.d}`;
   a.href = `mailto:${mail}`;
   a.textContent = mail;
 });
 
-/* ---------------- text splitting helpers ---------------- */
+/* ---------------- helpers ---------------- */
 function splitWords(el) {
   if (el.dataset.split) return $$('.w', el);
   const walk = (node) => {
@@ -110,16 +103,14 @@ function splitWords(el) {
         const frag = document.createDocumentFragment();
         n.textContent.split(/(\s+)/).forEach((part) => {
           if (!part) return;
-          if (/^\s+$/.test(part)) frag.append(part);
-          else {
-            const outer = document.createElement('span');
-            outer.className = 'wo';
-            const inner = document.createElement('span');
-            inner.className = 'w';
-            inner.textContent = part;
-            outer.append(inner);
-            frag.append(outer);
-          }
+          if (/^\s+$/.test(part)) return frag.append(part);
+          const o = document.createElement('span');
+          o.className = 'wo';
+          const i = document.createElement('span');
+          i.className = 'w';
+          i.textContent = part;
+          o.append(i);
+          frag.append(o);
         });
         n.replaceWith(frag);
       } else if (n.nodeType === 1) walk(n);
@@ -129,155 +120,138 @@ function splitWords(el) {
   el.dataset.split = '1';
   return $$('.w', el);
 }
+function splitChars(el) {
+  const text = el.textContent;
+  el.textContent = '';
+  [...text].forEach((c) => {
+    const s = document.createElement('span');
+    s.className = 'ch';
+    s.textContent = c === ' ' ? ' ' : c;
+    el.append(s);
+  });
+  return $$('.ch', el);
+}
 
 /* ---------------- animations ---------------- */
 if (reduce) {
   document.documentElement.classList.add('reduced');
 } else {
-  // Hero intro
-  const intro = gsap.timeline({ defaults: { ease: 'power4.out' } });
+  const tl = gsap.timeline({ defaults: { ease: 'power4.out' } });
+  tl.from('.header', { y: -100, duration: 0.9 }, 0);
+
   if ($('.hero__title')) {
-    intro
-      .from('.hero__title .ch', { yPercent: 115, rotate: 8, duration: 1.1, stagger: 0.035 })
-      .from('[data-hero-fade]', { y: 30, opacity: 0, duration: 0.9, stagger: 0.1 }, '-=0.8')
-      .from('.hero__frame', { clipPath: 'inset(100% 0% 0% 0% round 48px)', duration: 1.3, ease: 'expo.out' }, 0.1)
-      .from('.hero__photo', { scale: 1.3, duration: 1.6, ease: 'expo.out' }, 0.1)
-      .from('.hero__visual .float, .hero__chip', { scale: 0, opacity: 0, duration: 0.9, stagger: 0.07, ease: 'back.out(2)' }, 0.6)
-      .from('.hero__badge', { scale: 0, rotate: -180, duration: 1.2, ease: 'back.out(1.6)' }, 0.7)
-      .from('.header', { y: -100, duration: 0.9 }, 0.2);
+    const chars = [...splitChars($('.hero__first')), ...splitChars($('.hero__last'))];
+    tl.from('[data-hero-photo]', { y: 80, scale: 0.85, opacity: 0, duration: 1.4, ease: 'expo.out' }, 0.1)
+      .from('.hero__bg', { opacity: 0, scale: 1.1, duration: 1.6, ease: 'power2.out' }, 0)
+      .from(chars, { yPercent: 110, duration: 1.1, stagger: 0.04 }, 0.45)
+      .from('.hero__role', { y: 20, opacity: 0, duration: 0.8 }, 0.9)
+      .from('.hero__write', { scale: 0, opacity: 0, duration: 0.9, ease: 'back.out(2)' }, 1)
+      .from('.hero__ring', { scale: 0, rotate: -120, opacity: 0, duration: 1, ease: 'back.out(1.7)' }, 0.8)
+      .from('.hero__line', { scaleY: 0, duration: 1 }, 0.6)
+      .from('.hero__follow a, .hero__follow-text', { x: -20, opacity: 0, stagger: 0.1, duration: 0.7 }, 0.9)
+      .from('.hero__frame', { scaleX: 0.6, opacity: 0, duration: 1.2, ease: 'expo.out' }, 1);
+
+    // Photo gently shrinks/lifts while you scroll away
+    gsap.to('[data-hero-photo]', { yPercent: -8, scale: 0.94, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+    gsap.to('.hero__name', { yPercent: -30, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
   } else {
-    intro.from('[data-hero-fade]', { y: 30, opacity: 0, duration: 0.9, stagger: 0.1 }, 0.3).from('.header', { y: -100, duration: 0.9 }, 0);
+    tl.from('[data-hero-fade]', { y: 30, opacity: 0, duration: 0.9, stagger: 0.1 }, 0.5);
   }
 
-  // Badge spins with scroll
-  if ($('.hero__badge')) {
-    gsap.to('.hero__badge', { rotate: 360, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: 1 } });
-    gsap.to('.hero__visual', { yPercent: 12, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
-  }
+  // Parallax backgrounds
+  $$('[data-parallax]').forEach((el) => {
+    const k = +el.dataset.parallax;
+    gsap.fromTo(el, { yPercent: -k * 30 }, { yPercent: k * 30, ease: 'none', scrollTrigger: { trigger: el.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } });
+  });
 
-  // Line-by-line headings
+  // Headings word by word
   $$('.reveal-lines').forEach((el) => {
-    const words = splitWords(el);
-    gsap.from(words, {
+    const w = splitWords(el);
+    gsap.from(w, {
       yPercent: 110,
       duration: 1,
       ease: 'power4.out',
-      stagger: 0.04,
-      delay: el.hasAttribute('data-instant') ? 0.2 : 0,
+      stagger: 0.05,
+      delay: el.hasAttribute('data-instant') ? 0.3 : 0,
       scrollTrigger: el.hasAttribute('data-instant') ? undefined : { trigger: el, start: 'top 88%' },
     });
   });
 
-  // Generic reveal
+  // Dashed dividers draw in
+  $$('.dashed').forEach((el) => gsap.from(el, { scaleX: 0, duration: 1.4, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 90%' } }));
+
+  // Fade-up text
   ScrollTrigger.batch('.reveal', {
-    start: 'top 90%',
-    onEnter: (els) => gsap.to(els, { opacity: 1, y: 0, duration: 1, ease: 'power3.out', stagger: 0.08, overwrite: true }),
+    start: 'top 92%',
+    onEnter: (els) => gsap.to(els, { opacity: 1, y: 0, duration: 0.9, ease: 'power3.out', stagger: 0.07, overwrite: true }),
   });
 
-  // Scrubbed word highlight
-  $$('.scrub-words').forEach((el) => {
-    const words = splitWords(el);
-    gsap.fromTo(
-      words,
-      { opacity: 0.15 },
-      { opacity: 1, stagger: 0.05, ease: 'none', scrollTrigger: { trigger: el, start: 'top 80%', end: 'bottom 45%', scrub: true } }
-    );
+  // Images open up like a mask
+  $$('.reveal-img').forEach((el) => {
+    const im = $('img', el);
+    const t = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 88%' } });
+    t.to(el, { clipPath: 'inset(0% 0% 0% 0% round 0px)', duration: 1.3, ease: 'expo.out' }).to(im, { scale: 1, duration: 1.6, ease: 'expo.out' }, 0);
   });
 
-  // Parallax images
-  $$('.parallax img').forEach((img) =>
-    gsap.fromTo(img, { yPercent: -8, scale: 1.15 }, { yPercent: 8, ease: 'none', scrollTrigger: { trigger: img.parentElement, scrub: true } })
-  );
+  // Stats: count up + rule draws
+  $$('[data-count]').forEach((el) => {
+    const end = +el.dataset.count;
+    const o = { v: 0 };
+    el.textContent = '0';
+    gsap.to(o, { v: end, duration: 2, ease: 'power2.out', scrollTrigger: { trigger: el, start: 'top 88%' }, onUpdate: () => (el.textContent = Math.round(o.v)) });
+  });
+  $$('.stat__rule').forEach((el) => gsap.from(el, { scaleX: 0, duration: 1.2, ease: 'power3.out', delay: 0.3, scrollTrigger: { trigger: el, start: 'top 90%' } }));
 
-  // Marquee speed follows scroll velocity
-  const track = $('.marquee__track');
+  // Purple band marquee reacts to scroll speed
+  const track = $('.band__track');
   if (track) {
-    const loop = gsap.to(track, { xPercent: -50, ease: 'none', duration: 30, repeat: -1 });
+    const loop = gsap.to(track, { xPercent: -50, ease: 'none', duration: 40, repeat: -1 });
     ScrollTrigger.create({
       onUpdate: (self) => {
-        const v = gsap.utils.clamp(-6, 6, self.getVelocity() / 300);
-        gsap.to(loop, { timeScale: (self.direction || 1) * Math.max(1, Math.abs(v)), duration: 0.3, overwrite: true });
-        gsap.to(loop, { timeScale: self.direction || 1, duration: 1.2, delay: 0.3 });
+        const v = gsap.utils.clamp(1, 6, Math.abs(self.getVelocity() / 250));
+        gsap.to(loop, { timeScale: (self.direction || 1) * v, duration: 0.3, overwrite: true });
+        gsap.to(loop, { timeScale: self.direction || 1, duration: 1.4, delay: 0.3 });
       },
     });
   }
 
-  // Count-up numbers
-  $$('[data-count]').forEach((el) => {
-    const end = +el.dataset.count;
-    const obj = { v: 0 };
-    el.textContent = '0';
-    gsap.to(obj, {
-      v: end,
-      duration: 2,
-      ease: 'power2.out',
-      scrollTrigger: { trigger: el, start: 'top 85%' },
-      onUpdate: () => (el.textContent = Math.round(obj.v)),
-    });
-  });
+  // Timeline: progress line fills and dots light up
+  const tlEl = $('[data-timeline]');
+  if (tlEl) {
+    gsap.to('.tl__progress', { scaleY: 1, ease: 'none', scrollTrigger: { trigger: tlEl, start: 'top 60%', end: 'bottom 60%', scrub: true } });
+    $$('.tl__item').forEach((item) =>
+      ScrollTrigger.create({ trigger: item, start: 'top 62%', onEnter: () => item.classList.add('is-active'), onLeaveBack: () => item.classList.remove('is-active') })
+    );
+  }
 
-  // Horizontal gallery (desktop), native swipe on mobile
-  const mm = gsap.matchMedia();
-  mm.add('(min-width: 900px)', () => {
-    const pin = $('.gallery__pin');
-    const g = $('.gallery__track');
-    if (!pin || !g) return;
-    const dist = () => g.scrollWidth - innerWidth + 48;
-    gsap.to(g, {
-      x: () => -dist(),
-      ease: 'none',
-      scrollTrigger: { trigger: pin, start: 'center center', end: () => `+=${dist()}`, pin: true, scrub: 1, invalidateOnRefresh: true },
-    });
-  });
+  // Dinosaur walks in
+  if ($('.dino')) {
+    gsap.fromTo('.dino__img', { xPercent: -18, rotate: -3 }, { xPercent: 0, rotate: 0, ease: 'none', scrollTrigger: { trigger: '.dino', start: 'top bottom', end: 'center center', scrub: 1 } });
+    gsap.from('.dino__pill', { scale: 0, rotate: -12, duration: 1, ease: 'back.out(2)', scrollTrigger: { trigger: '.dino', start: 'top 55%' } });
+    gsap.from('.dino__badge', { scale: 0, duration: 1, ease: 'back.out(2)', scrollTrigger: { trigger: '.dino', start: 'top 55%' } });
+    gsap.from('.dino .round-btn', { x: 40, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: '.dino', start: 'top 60%' } });
+  }
 
-  // Mouse parallax for floating decor
   if (finePointer) {
-    const floats = $$('[data-depth]');
-    window.addEventListener('pointermove', (e) => {
-      const x = e.clientX / innerWidth - 0.5;
-      const y = e.clientY / innerHeight - 0.5;
-      floats.forEach((f) => gsap.to(f, { x: x * 60 * f.dataset.depth, y: y * 60 * f.dataset.depth, duration: 1.2, ease: 'power3.out' }));
-    });
-
-    // Magnetic buttons
     $$('[data-magnetic]').forEach((el) => {
       el.addEventListener('pointermove', (e) => {
         const r = el.getBoundingClientRect();
-        gsap.to(el, { x: (e.clientX - r.left - r.width / 2) * 0.25, y: (e.clientY - r.top - r.height / 2) * 0.35, duration: 0.4 });
+        gsap.to(el, { x: (e.clientX - r.left - r.width / 2) * 0.2, y: (e.clientY - r.top - r.height / 2) * 0.3, duration: 0.4 });
       });
-      el.addEventListener('pointerleave', () => gsap.to(el, { x: 0, y: 0, duration: 0.7, ease: 'elastic.out(1, 0.4)' }));
+      el.addEventListener('pointerleave', () => gsap.to(el, { x: 0, y: 0, duration: 0.8, ease: 'elastic.out(1, 0.4)' }));
     });
-
-    // Tilt cards
     $$('[data-tilt]').forEach((el) => {
       el.addEventListener('pointermove', (e) => {
         const r = el.getBoundingClientRect();
-        gsap.to(el, {
-          rotateY: ((e.clientX - r.left) / r.width - 0.5) * 8,
-          rotateX: -((e.clientY - r.top) / r.height - 0.5) * 8,
-          transformPerspective: 900,
-          duration: 0.5,
-        });
+        gsap.to(el, { rotateY: ((e.clientX - r.left) / r.width - 0.5) * 10, rotateX: -((e.clientY - r.top) / r.height - 0.5) * 10, transformPerspective: 800, duration: 0.5 });
       });
       el.addEventListener('pointerleave', () => gsap.to(el, { rotateX: 0, rotateY: 0, duration: 0.8, ease: 'power3.out' }));
     });
-
-    // Experience hover preview follows the cursor
-    const preview = $('.exp__preview');
-    if (preview) {
-      const pimg = $('img', preview);
-      const xTo = gsap.quickTo(preview, 'x', { duration: 0.6, ease: 'power3' });
-      const yTo = gsap.quickTo(preview, 'y', { duration: 0.6, ease: 'power3' });
-      $$('.exp__item').forEach((item) => {
-        item.addEventListener('pointerenter', () => {
-          pimg.src = item.dataset.preview;
-          preview.classList.add('is-visible');
-        });
-        item.addEventListener('pointerleave', () => preview.classList.remove('is-visible'));
-      });
+    // Hero photo follows the mouse a little
+    const photo = $('[data-hero-photo] img');
+    if (photo) {
       window.addEventListener('pointermove', (e) => {
-        xTo(e.clientX + 24);
-        yTo(e.clientY - 120);
+        gsap.to(photo, { x: (e.clientX / innerWidth - 0.5) * 18, y: (e.clientY / innerHeight - 0.5) * 12, duration: 1.2, ease: 'power3.out' });
       });
     }
   }
@@ -285,24 +259,29 @@ if (reduce) {
   window.addEventListener('load', () => ScrollTrigger.refresh());
 }
 
-/* ---------------- dialogs (popups) ---------------- */
+/* ---------------- popups ---------------- */
 function openDialog(d) {
+  if (d.open) return;
+  $$('dialog[open]').forEach((o) => o !== d && !o.matches('[data-status-modal]') && o.close());
   d.showModal();
   lenis?.stop();
   document.documentElement.classList.add('modal-open');
   if (!reduce) {
     gsap.fromTo(d, { opacity: 0 }, { opacity: 1, duration: 0.3 });
-    const box = $('.modal__box', d) || $('img', d);
-    gsap.fromTo(box, { y: 60, scale: 0.94, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 0.6, ease: 'expo.out' });
-    const kids = $$('.modal__content > *', d);
-    if (kids.length) gsap.from(kids, { y: 20, opacity: 0, stagger: 0.05, duration: 0.6, delay: 0.15, ease: 'power3.out' });
+    const frame = $('.popup__frame', d) || $('.popup__card', d);
+    gsap.fromTo(frame, { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'expo.out' });
+    const card = $('.popup__card', frame);
+    if (card && card !== frame) gsap.fromTo(card, { y: 60, scale: 0.96 }, { y: 0, scale: 1, duration: 0.9, delay: 0.1, ease: 'expo.out' });
   }
+  d.scrollTop = 0;
 }
 function closeDialog(d) {
   const done = () => {
     d.close();
-    lenis?.start();
-    document.documentElement.classList.remove('modal-open');
+    if (!$('dialog[open]')) {
+      lenis?.start();
+      document.documentElement.classList.remove('modal-open');
+    }
   };
   if (reduce) return done();
   gsap.to(d, { opacity: 0, duration: 0.25, onComplete: done });
@@ -316,28 +295,17 @@ $$('dialog').forEach((d) => {
     closeDialog(d);
   });
 });
+document.addEventListener('click', (e) => {
+  const t = e.target.closest('[data-popup-open]');
+  if (!t) return;
+  const d = document.getElementById(`popup-${t.dataset.popupOpen}`);
+  if (!d) return;
+  e.preventDefault();
+  closeMenu();
+  openDialog(d);
+});
 
-const expModal = $('[data-exp-modal]');
-$$('[data-modal-open]').forEach((btn) =>
-  btn.addEventListener('click', () => {
-    const tpl = document.getElementById(btn.dataset.modalOpen);
-    const body = $('[data-exp-body]', expModal);
-    body.replaceChildren(tpl.content.cloneNode(true));
-    openDialog(expModal);
-  })
-);
-
-const lightbox = $('[data-lightbox]');
-$$('[data-lightbox-open]').forEach((btn) =>
-  btn.addEventListener('click', () => {
-    const img = $('[data-lightbox-img]', lightbox);
-    img.src = btn.dataset.lightboxOpen;
-    img.alt = $('img', btn)?.alt || '';
-    openDialog(lightbox);
-  })
-);
-
-/* ---------------- contact form ---------------- */
+/* ---------------- forms ---------------- */
 const statusModal = $('[data-status-modal]');
 function showStatus(ok) {
   const title = $('[data-status-title]', statusModal);
@@ -345,6 +313,7 @@ function showStatus(ok) {
   title.textContent = ok ? title.dataset.ok : title.dataset.err;
   text.textContent = ok ? text.dataset.ok : text.dataset.err;
   $('[data-status-icon]', statusModal).className = `status__icon ${ok ? 'is-ok' : 'is-err'}`;
+  $$('dialog[open]').forEach((d) => d !== statusModal && d.close());
   openDialog(statusModal);
 }
 $$('[data-form]').forEach((form) =>

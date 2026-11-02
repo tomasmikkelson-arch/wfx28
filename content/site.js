@@ -14,5 +14,4 @@ export default {
     { code: 'en', label: 'EN', name: 'English', prefix: '' },
     { code: 'fr', label: 'FR', name: 'Français', prefix: 'fr/' },
   ],
-  gallery: ['golden-gate', 'pro-donbas', 'team', 'maie-sens-site', 'kids-books', 'newsroom', 'at-work', 'mediabaza-chernihiv'],
 };
