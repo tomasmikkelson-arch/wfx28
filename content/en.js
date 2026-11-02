@@ -1,4 +1,4 @@
-// English content — verbatim from isychenko.com (homepage, popups and training pages).
+// English content.
 // Edit text here; every push to main rebuilds the site.
 export default {
   lang: 'en',

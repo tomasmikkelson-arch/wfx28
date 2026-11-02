@@ -1,5 +1,5 @@
 // Generates static, SEO-friendly HTML for every page in every language.
-// Layout mirrors the original isychenko.com; output goes to app/ (Vite root).
+// Output goes to app/ (Vite root).
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -68,7 +68,7 @@ const icons = {
 const emailHtml = () =>
   `<a class="js-email" data-u="${site.email.user}" data-d="${site.email.domain}" href="#contact">${site.email.user}<span aria-hidden="true">&#64;</span>${site.email.domain}</a>`;
 
-// ---------- analytics (same IDs as the current isychenko.com) ----------
+// ---------- analytics ----------
 function analytics() {
   const a = site.analytics || {};
   let out = '';
@@ -77,7 +77,7 @@ function analytics() {
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','${a.ga4}');</script>`;
   if (a.clarity)
     out += `
-    <script>(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)})(window,document,"clarity","script","${a.clarity}");</script>`;
+    <script>addEventListener('load',function(){setTimeout(function(){(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y)})(window,document,"clarity","script","${a.clarity}")},1500)});</script>`;
   return out;
 }
 
@@ -105,9 +105,8 @@ function head(t, { title, description, slug = '' }) {
     ${alternates}
     <link rel="alternate" hreflang="x-default" href="${site.url}/${slug ? `${slug}/` : ''}">
     <link rel="icon" type="image/svg+xml" href="${asset('favicon.svg')}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300..800;1,300..500&display=swap">
+    <link rel="preload" href="${asset('fonts/montserrat-latin-wght-normal.woff2')}" as="font" type="font/woff2" crossorigin>
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <script>document.documentElement.classList.replace('no-js','js')</script>
     <link rel="stylesheet" href="/src/styles/main.css">
     <script type="module" src="/src/main.js"></script>

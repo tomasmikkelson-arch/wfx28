@@ -1,5 +1,5 @@
 /**
- * Contact form handler for isychenko.com — runs in YOUR Google account (free, no ads, no third party).
+ * Contact form handler (Google Apps Script web app).
  *
  * Setup (5 minutes, once):
  *  1. Open https://script.google.com → New project → paste this file instead of the default code.

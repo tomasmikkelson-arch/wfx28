@@ -206,12 +206,25 @@ if (reduce) {
   // Purple band marquee reacts to scroll speed
   const track = $('.band__track');
   if (track) {
-    const loop = gsap.to(track, { xPercent: -50, ease: 'none', duration: 40, repeat: -1 });
+    const loop = gsap.to(track, { xPercent: -50, ease: 'none', duration: 40, repeat: -1, paused: true });
+    let lastSpeed = 1;
     ScrollTrigger.create({
+      trigger: '.band',
+      start: 'top bottom',
+      end: 'bottom top',
+      // Run only while visible; react to scroll speed without spawning a tween every frame.
+      onToggle: (self) => (self.isActive ? loop.play() : loop.pause()),
       onUpdate: (self) => {
-        const v = gsap.utils.clamp(1, 6, Math.abs(self.getVelocity() / 250));
-        gsap.to(loop, { timeScale: (self.direction || 1) * v, duration: 0.3, overwrite: true });
-        gsap.to(loop, { timeScale: self.direction || 1, duration: 1.4, delay: 0.3 });
+        const dir = self.direction || 1;
+        const speed = dir * gsap.utils.clamp(1, 6, Math.abs(self.getVelocity() / 250));
+        if (Math.abs(speed - lastSpeed) < 0.5) return;
+        lastSpeed = speed;
+        gsap.to(loop, {
+          timeScale: speed,
+          duration: 0.3,
+          overwrite: true,
+          onComplete: () => gsap.to(loop, { timeScale: dir, duration: 1.4, overwrite: true, onComplete: () => (lastSpeed = dir) }),
+        });
       },
     });
   }
@@ -235,9 +248,12 @@ if (reduce) {
 
   if (finePointer) {
     $$('[data-magnetic]').forEach((el) => {
+      const xTo = gsap.quickTo(el, 'x', { duration: 0.4, ease: 'power3' });
+      const yTo = gsap.quickTo(el, 'y', { duration: 0.4, ease: 'power3' });
       el.addEventListener('pointermove', (e) => {
         const r = el.getBoundingClientRect();
-        gsap.to(el, { x: (e.clientX - r.left - r.width / 2) * 0.2, y: (e.clientY - r.top - r.height / 2) * 0.3, duration: 0.4 });
+        xTo((e.clientX - r.left - r.width / 2) * 0.2);
+        yTo((e.clientY - r.top - r.height / 2) * 0.3);
       });
       el.addEventListener('pointerleave', () => gsap.to(el, { x: 0, y: 0, duration: 0.8, ease: 'elastic.out(1, 0.4)' }));
     });
@@ -251,9 +267,19 @@ if (reduce) {
     // Hero photo follows the mouse a little
     const photo = $('.hero__pic img');
     if (photo) {
-      window.addEventListener('pointermove', (e) => {
-        gsap.to(photo, { x: (e.clientX / innerWidth - 0.5) * 18, y: (e.clientY / innerHeight - 0.5) * 12, duration: 1.2, ease: 'power3.out' });
-      });
+      const xTo = gsap.quickTo(photo, 'x', { duration: 1.2, ease: 'power3' });
+      const yTo = gsap.quickTo(photo, 'y', { duration: 1.2, ease: 'power3' });
+      let heroVisible = true;
+      ScrollTrigger.create({ trigger: '.hero', start: 'top bottom', end: 'bottom top', onToggle: (self) => (heroVisible = self.isActive) });
+      window.addEventListener(
+        'pointermove',
+        (e) => {
+          if (!heroVisible) return;
+          xTo((e.clientX / innerWidth - 0.5) * 18);
+          yTo((e.clientY / innerHeight - 0.5) * 12);
+        },
+        { passive: true }
+      );
     }
   }
 

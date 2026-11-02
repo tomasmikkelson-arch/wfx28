@@ -7,7 +7,7 @@ export default {
     { id: 'facebook', label: 'Facebook', url: 'https://www.facebook.com/Ihor.Isychenko/' },
     { id: 'linkedin', label: 'LinkedIn', url: 'https://www.linkedin.com/in/ihor-isychenko/' },
   ],
-  // Contact form handler: Google Apps Script (tools/contact-form/Code.gs) in the owner's Google account.
+  // Contact form endpoint (see tools/contact-form).
   formEndpoint: 'https://script.google.com/macros/s/AKfycbwT4o4PLahfmJRtCc08VJDoOr3OynZzRvfSrZhTR8k9vY9yaMeexZMKGfgdzaZFFEI_GA/exec',
   // Year shown at the end of the copyright line (current year is used if later).
   copyrightUntil: 2027,
@@ -25,7 +25,7 @@ export default {
     '6262.com.ua',
     '0372.ua',
   ],
-  // Same analytics as on the current isychenko.com (Google Analytics 4 + Microsoft Clarity).
+  // Google Analytics 4 + Microsoft Clarity IDs.
   analytics: { ga4: 'G-6B2CXD3TN5', clarity: 'pn2tnj629x' },
   languages: [
     { code: 'en', label: 'EN', name: 'English', prefix: '' },

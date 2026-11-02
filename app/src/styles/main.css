@@ -1,5 +1,6 @@
+@import './fonts.css';
 /* =====================================================================
-   isychenko.com — same design as the original, rebuilt & animated
+   Main stylesheet
    ===================================================================== */
 :root {
   --purple: #7d71f7;
