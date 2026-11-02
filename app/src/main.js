@@ -341,16 +341,28 @@ $$('[data-form]').forEach((form) =>
       const ctrl = new AbortController();
       const timer = setTimeout(() => ctrl.abort(), 15000);
       const payload = { ...data, page: location.href, lang: document.documentElement.lang };
-      const res = await fetch(endpoint, {
-        method: 'POST',
-        signal: ctrl.signal,
-        // Apps Script: text/plain avoids a CORS preflight; FormSubmit expects JSON.
-        headers: isAppsScript ? { 'Content-Type': 'text/plain;charset=utf-8' } : { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify(isAppsScript ? payload : { ...payload, _template: 'table', _captcha: 'false' }),
-      }).finally(() => clearTimeout(timer));
-      if (!res.ok) throw new Error('http ' + res.status);
-      const json = await res.json().catch(() => ({}));
-      if (json.ok === false || json.success === 'false' || json.success === false) throw new Error(json.error || 'rejected');
+      if (isAppsScript) {
+        // Google Apps Script answers through a redirect that browsers often block for reading (CORS),
+        // even when the email was sent. Send as a "simple" no-cors request: it always reaches the script,
+        // we just can't read the reply, so success is shown once the request has been delivered.
+        await fetch(endpoint, {
+          method: 'POST',
+          mode: 'no-cors',
+          signal: ctrl.signal,
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload),
+        }).finally(() => clearTimeout(timer));
+      } else {
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          signal: ctrl.signal,
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({ ...payload, _template: 'table', _captcha: 'false' }),
+        }).finally(() => clearTimeout(timer));
+        if (!res.ok) throw new Error('http ' + res.status);
+        const json = await res.json().catch(() => ({}));
+        if (json.ok === false || json.success === 'false' || json.success === false) throw new Error(json.error || 'rejected');
+      }
       form.reset();
       form.classList.remove('was-validated');
       showStatus(true);
