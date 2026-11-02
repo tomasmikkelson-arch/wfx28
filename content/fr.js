@@ -282,22 +282,29 @@ export default {
   },
   band: { label: 'Projets et partenaires' },
   testimonials: {
-    title: 'Ce qu’en disent mes collègues',
+    title: 'La confiance de ceux avec qui je travaille',
+    // Quotes stay in their original English (authentic LinkedIn recommendations).
+    // Set to true to show the French translations below instead.
+    translateQuotes: false,
+    originalNote: 'Recommandations originales en anglais, publiées sur LinkedIn.',
     kicker: 'Recommandations',
     source: 'Recommandation sur LinkedIn',
     items: [
       {
         ...en.testimonials.items[0],
+        role: 'Responsable de la communication, Legal Hundred',
         quote:
           'Ihor comprend clairement les objectifs de communication et possède un sens visuel affirmé. En travaillant ensemble sur un projet dans le domaine juridique, j’ai découvert un professionnel fiable et réfléchi. Il sait traiter des informations complexes, saisit le contexte de chaque tâche et trouve des solutions visuelles claires et efficaces. Il est attentif aux détails, respecte les délais et reste ouvert à la discussion et aux retours.',
       },
       {
         ...en.testimonials.items[1],
+        role: 'Chargée des médias et de la communication',
         quote:
           'Ihor est une personne déterminée et énergique qui vise toujours les meilleurs résultats. Je le recommande sincèrement comme un professionnel talentueux et inspirant, qui serait un véritable atout pour n’importe quelle équipe. L’une de ses grandes forces est sa capacité non seulement à générer des idées innovantes, mais aussi à les mettre en œuvre avec qualité et un impact réel. Son approche proactive, sa communication fluide et son attitude positive ont rendu notre collaboration particulièrement agréable.',
       },
       {
         ...en.testimonials.items[2],
+        role: 'Directrice du département médias',
         quote:
           'C’est une personne professionnelle et fiable. Il aborde ses tâches avec sens des responsabilités et ne s’arrête pas tant que tout n’est pas parfait. Il a une pensée originale et des idées fraîches et pertinentes pour chaque situation. Il a l’œil et comprend bien les tendances actuelles. Il est facile de travailler avec lui, je le recommande vivement.',
       },

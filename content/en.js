@@ -290,12 +290,13 @@ export default {
   },
   band: { label: 'Projects & partners' },
   testimonials: {
-    title: 'What colleagues say',
+    title: 'Trusted by the people I work with',
     kicker: 'Recommendations',
     source: 'Recommendation on LinkedIn',
     items: [
       {
         name: 'Anastasiia Kolomiichuk',
+        role: 'Communications Manager, Legal Hundred',
         photo: 'anastasiia',
         url: 'https://www.linkedin.com/in/anastasiia-kolomiichuk-10b14b265/',
         quote:
@@ -303,6 +304,7 @@ export default {
       },
       {
         name: 'Lidia Khaustova',
+        role: 'Media and Communications Officer',
         photo: 'lidia',
         url: 'https://www.linkedin.com/in/lidia-khaustova/',
         quote:
@@ -310,6 +312,7 @@ export default {
       },
       {
         name: 'Oleksandra Pylypenko',
+        role: 'Director of Media Department',
         photo: 'oleksandra',
         url: 'https://www.linkedin.com/in/oleksandra-pylypenko-b90344321/',
         quote:

@@ -276,17 +276,19 @@ function testimonials(t) {
   if (!T || !T.items.length) return '';
   return `
     <section class="reviews" aria-labelledby="reviews-title">
+      <div class="reviews__sep" aria-hidden="true"><span></span><img src="${svg('sparkle')}" alt="" width="28" height="34"><span></span></div>
       <div class="container">
         <div class="reviews__head">
           <p class="reviews__kicker reveal">${T.kicker}</p>
           <h2 class="section-title reveal-lines" id="reviews-title">${T.title}</h2>
+          ${T.translateQuotes === false && T.originalNote ? `<p class="reviews__note reveal">${T.originalNote}</p>` : ''}
         </div>
         <ul class="reviews__list">
-          ${T.items
+          ${T.items.map((r, i) => (T.translateQuotes === false ? { ...r, quote: en.testimonials.items[i].quote } : r))
             .map(
               (r) => `<li class="review reveal">
             <svg class="review__mark" viewBox="0 0 48 36" aria-hidden="true"><path fill="currentColor" d="M0 36V22C0 9.6 6.4 2.3 19.2 0l2 5.2C14 7.4 10.6 11.6 10.4 18H20v18H0zm28 0V22C28 9.6 34.4 2.3 47.2 0l2 5.2C42 7.4 38.6 11.6 38.4 18H48v18H28z"/></svg>
-            <blockquote class="review__quote"><p>${r.quote}</p></blockquote>
+            <blockquote class="review__quote"${T.translateQuotes === false ? ' lang="en"' : ''}><p>${r.quote}</p></blockquote>
             <div class="review__person">
               ${r.photo ? `<img class="review__photo" src="${asset(`img/people/${r.photo}.webp`)}" alt="${esc(r.name)}" width="64" height="64" loading="lazy">` : ''}
               <div class="review__who">
