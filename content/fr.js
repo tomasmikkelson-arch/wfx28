@@ -71,7 +71,7 @@ export default {
     text: 'Mon approche allie stratégie et créativité pour aider les marques à se démarquer dans le paysage numérique actuel. Chaque chiffre reflète une valeur réelle apportée aux clients qui ont fait confiance à ma vision.',
     items: [
       { value: 3, suffix: '', head: 'domaines d’activité', label: 'marketing, design graphique, SMM' },
-      { value: 8, suffix: '+', head: 'ans d’expérience', label: 'dans la mise en œuvre de solutions efficaces' },
+      { value: 9, suffix: '+', head: 'ans d’expérience', label: 'dans la mise en œuvre de solutions efficaces' },
       { value: 35, suffix: '+', head: '', label: 'projets livrés dans les délais avec succès' },
       { value: 400, suffix: '+', head: '', label: 'concepts de communication visuelle créés' },
     ],
@@ -280,6 +280,7 @@ export default {
       ),
     ],
   },
+  band: { label: 'J’ai collaboré avec' },
   dino: {
     connect: 'Me contacter',
     title: 'Donner vie aux visions marketing grâce à un design remarquable. Restons en contact !',

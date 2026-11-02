@@ -4,3 +4,5 @@ dist/
 app/**/*.html
 !app/src/**
 app/public/404.html
+app/public/sitemap.xml
+app/public/robots.txt

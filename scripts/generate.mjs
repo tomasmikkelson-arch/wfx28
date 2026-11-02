@@ -58,6 +58,9 @@ const icons = {
   linkedin: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6.9 8.8H3.8V20h3.1V8.8zM5.3 3.9a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6zM20.2 13.6c0-3-1.6-5-4.4-5-1.4 0-2.4.8-2.8 1.5V8.8H10V20h3.1v-5.6c0-1.5.3-2.9 2.1-2.9 1.8 0 1.8 1.7 1.8 3V20h3.2v-6.4z"/></svg>`,
   facebookOutline: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="currentColor" d="M13.4 20.5v-6.2h2.1l.3-2.5h-2.4v-1.6c0-.7.2-1.2 1.2-1.2h1.3V6.8c-.2 0-1-.1-1.9-.1-1.9 0-3.2 1.1-3.2 3.3v1.8H8.7v2.5h2.1v6.2z"/></svg>`,
   send: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M4 9v10h14M14 4l6 2-2 6M20 6l-9 7"/></svg>`,
+  close: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>`,
+  calendar: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
+  pin: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>`,
   chevron: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 15 7-7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
 };
 
@@ -128,6 +131,7 @@ function header(t, slug = '') {
         <a href="${home}#contact" class="nav__link">${t.nav.contacts}</a>
       </nav>
       <div class="header__end">
+        <a class="header__cv" href="${site.cv}" target="_blank" rel="noopener">${t.nav.cv} ${arrow}</a>
         <div class="lang" role="group" aria-label="${t.nav.langLabel}">${langs}</div>
         <button class="burger" type="button" aria-expanded="false" aria-controls="menu" aria-label="${t.nav.menu}" data-burger><span></span><span></span><span></span></button>
       </div>
@@ -138,6 +142,7 @@ function header(t, slug = '') {
       <a href="${home}#biography">${t.nav.about}</a>
       <a href="${home}#experience">${t.nav.experience}</a>
       <a href="${home}#contact">${t.nav.contacts}</a>
+      <a href="${site.cv}" target="_blank" rel="noopener">${t.nav.cv} ${arrow}</a>
     </nav>
     <div class="menu__foot">${site.socials.map((s) => `<a href="${s.url}" target="_blank" rel="noopener" aria-label="${s.label}">${icons[s.id]}</a>`).join('')}</div>
   </div>`;
@@ -152,6 +157,7 @@ function footer(t) {
         <div class="footer__brand">
           <img class="footer__logo" src="${svg('logo-dark')}" alt="Isychenko" width="350" height="68" loading="lazy">
           <p class="footer__tagline">${t.footer.tagline}</p>
+          <p class="footer__role">${t.hero.role}</p>
           <div class="footer__socials">${site.socials
             .map((s) => `<a href="${s.url}" target="_blank" rel="noopener" aria-label="${s.label}" data-magnetic>${icons[s.id]}</a>`)
             .join('')}</div>
@@ -173,7 +179,7 @@ function footer(t) {
         </div>
       </div>
     </div>
-    <div class="footer__bottom"><p>Copyright © 2024 - ${new Date().getFullYear()} Ihor Isychenko. ${t.footer.rights}</p></div>
+    <div class="footer__bottom"><p>Copyright © 2024 - ${Math.max(new Date().getFullYear(), site.copyrightUntil)} Ihor Isychenko. ${t.footer.rights}</p></div>
   </footer>
   <a href="#top" class="to-top" aria-label="${t.nav.top}" data-top>${icons.chevron}</a>`;
 }
@@ -195,18 +201,25 @@ function popups(t, withExp) {
         .filter((e) => e.popup)
         .map(
           (e) => `
-  <dialog class="popup" id="popup-${e.id}" aria-labelledby="popup-${e.id}-title">
+  <dialog class="popup popup--exp" id="popup-${e.id}" aria-labelledby="popup-${e.id}-title" data-lenis-prevent>
     <div class="popup__frame">
-      <button class="popup__close" type="button" data-close aria-label="${t.nav.close}">✕</button>
+      <button class="popup__close" type="button" data-close aria-label="${t.nav.close}">${icons.close}</button>
       <article class="popup__card">
-        <h2 class="popup__title" id="popup-${e.id}-title">${e.role}</h2>
-        <p class="popup__sub">${e.popup.org} ${t.experience.workExp}</p>
-        <div class="popup__img">${img(e.popup.image, e.company, { sizes: '(min-width: 700px) 520px, 90vw' })}</div>
+        <header class="popup__head">
+          <span class="popup__chip">${e.popup.org} · ${t.experience.workExp}</span>
+          <h2 class="popup__title" id="popup-${e.id}-title">${e.role}</h2>
+          <ul class="popup__meta"><li>${icons.calendar}${e.period}</li><li>${icons.pin}${e.place}</li></ul>
+        </header>
+        <div class="popup__img">${img(e.popup.image, e.company, { sizes: '(min-width: 800px) 680px, 92vw' })}</div>
         <div class="popup__body">
           ${e.popup.blocks
             .map((b) => (b.h ? `<h3>${b.h}</h3>` : b.p ? `<p>${b.p}</p>` : `<ul>${b.li.map((x) => `<li>${x}</li>`).join('')}</ul>`))
             .join('\n          ')}
         </div>
+        <footer class="popup__foot">
+          <p>${t.form.popupText}</p>
+          <button type="button" class="btn btn--dark" data-popup-open="contact">${t.dino.connect} ${arrow}</button>
+        </footer>
       </article>
     </div>
   </dialog>`
@@ -214,17 +227,23 @@ function popups(t, withExp) {
         .join('')
     : '';
   return `${expPopups}
-  <dialog class="popup" id="popup-contact" aria-labelledby="popup-contact-title">
+  <dialog class="popup popup--contact" id="popup-contact" aria-labelledby="popup-contact-title" data-lenis-prevent>
     <div class="popup__frame">
-      <button class="popup__close" type="button" data-close aria-label="${t.nav.close}">✕</button>
+      <button class="popup__close" type="button" data-close aria-label="${t.nav.close}">${icons.close}</button>
       <form class="popup__card form" data-form data-endpoint="${site.formEndpoint}" novalidate>
-        <h2 class="popup__title" id="popup-contact-title">${t.form.popupTitle}</h2>
-        <p class="popup__sub">${t.form.popupText}</p>
+        <header class="popup__head">
+          <span class="popup__chip">${t.nav.contacts}</span>
+          <h2 class="popup__title" id="popup-contact-title">${t.form.popupTitle}</h2>
+          <p class="popup__sub">${t.form.popupText}</p>
+          <div class="popup__direct">${emailHtml()}${site.socials
+            .map((x) => `<a href="${x.url}" target="_blank" rel="noopener" aria-label="${x.label}">${icons[x.id]}</a>`)
+            .join('')}</div>
+        </header>
         ${formFields(t, false)}
       </form>
     </div>
   </dialog>
-  <dialog class="popup popup--status" data-status-modal aria-labelledby="status-title">
+  <dialog class="popup popup--status" data-lenis-prevent data-status-modal aria-labelledby="status-title">
     <div class="popup__card popup__card--sm">
       <div class="status__icon" data-status-icon></div>
       <h2 class="popup__title" id="status-title" data-status-title data-ok="${esc(t.form.okTitle)}" data-err="${esc(t.form.errTitle)}"></h2>
@@ -268,6 +287,7 @@ function home(t) {
     <section class="hero" id="top" aria-labelledby="hero-title">
       <div class="hero__bg" data-parallax="0.25" style="background-image:url(${bg('bg-hero', 2400)})"></div>
       <div class="container hero__stage">
+        <div class="hero__photo" data-hero-photo>
         <aside class="hero__follow" aria-label="${t.hero.follow}">
           <span class="hero__line" aria-hidden="true"></span>
           ${site.socials
@@ -278,14 +298,13 @@ function home(t) {
             .join('')}
           <span class="hero__follow-text">${t.hero.follow}</span>
         </aside>
-        <div class="hero__photo" data-hero-photo>
-          ${img('hero', 'Ihor Isychenko', { sizes: '(min-width: 1100px) 846px, 92vw', eager: true })}
-        </div>
+          <div class="hero__pic">${img('hero', 'Ihor Isychenko', { sizes: '(min-width: 1100px) 846px, 92vw', eager: true })}</div>
         <button type="button" class="hero__ring" data-popup-open="contact" aria-label="${esc(t.hero.ring)}" data-magnetic>
           <svg viewBox="0 0 200 200" aria-hidden="true"><defs><path id="ringPath" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0"/></defs>
             <text><textPath href="#ringPath">${esc(ringText)}</textPath></text></svg>
-          <span class="hero__ring-circle"></span>
+          <span class="hero__ring-circle"><span class="hero__ring-icon"></span></span>
         </button>
+        </div>
       </div>
       <div class="container hero__name">
         <h1 class="hero__title" id="hero-title"><span class="hero__first">${t.hero.first}</span> <span class="hero__last">${t.hero.last}</span></h1>
@@ -346,9 +365,12 @@ function home(t) {
       </div>
     </section>
 
-    <div class="band" aria-hidden="true"><div class="band__track">${Array(8)
-      .fill(`<span>${t.hero.role}</span><img src="${svg('sparkle')}" alt="" width="24" height="29">`)
-      .join('')}</div></div>
+    <section class="band" aria-label="${t.band.label}">
+      <p class="band__label">${t.band.label}</p>
+      <div class="band__viewport"><ul class="band__track">${[...site.partners, ...site.partners]
+        .map((x, i) => `<li${i >= site.partners.length ? ' aria-hidden="true"' : ''}><span>${x}</span><img src="${svg('sparkle')}" alt="" width="18" height="22"></li>`)
+        .join('')}</ul></div>
+    </section>
 
     <section class="exp" id="experience" aria-labelledby="exp-title">
       <div class="container">
@@ -502,5 +524,8 @@ write(
   'public/404.html',
   `<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Page not found — Ihor Isychenko</title><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="3;url=${BASE}"><style>body{margin:0;min-height:100vh;display:grid;place-items:center;font-family:Montserrat,system-ui,sans-serif;background:#7D71F7;color:#fff;text-align:center}a{color:#fff}</style></head><body><div><h1 style="font-size:clamp(4rem,15vw,10rem);margin:0">404</h1><p><a href="${BASE}">isychenko.com →</a></p></div></body></html>`
 );
+const urls = inputs.map((p) => `${site.url}/${p.replace(/index\.html$/, '')}`);
+write('public/sitemap.xml', `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map((u) => `  <url><loc>${u}</loc></url>`).join('\n')}\n</urlset>\n`);
+write('public/robots.txt', `User-agent: *\nAllow: /\nSitemap: ${site.url}/sitemap.xml\n`);
 writeFileSync(join(root, '..', '.pages.json'), JSON.stringify(inputs, null, 2));
 console.log(`Generated ${inputs.length} pages (base ${BASE})`);

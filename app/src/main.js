@@ -152,7 +152,7 @@ if (reduce) {
       .from('.hero__frame', { scaleX: 0.6, opacity: 0, duration: 1.2, ease: 'expo.out' }, 1);
 
     // Photo gently shrinks/lifts while you scroll away
-    gsap.to('[data-hero-photo]', { yPercent: -8, scale: 0.94, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+    gsap.to('.hero__stage', { y: -60, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
     gsap.to('.hero__name', { yPercent: -30, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
   } else {
     tl.from('[data-hero-fade]', { y: 30, opacity: 0, duration: 0.9, stagger: 0.1 }, 0.5);
@@ -226,7 +226,7 @@ if (reduce) {
 
   // Dinosaur walks in
   if ($('.dino')) {
-    gsap.fromTo('.dino__img', { xPercent: -18, rotate: -3 }, { xPercent: 0, rotate: 0, ease: 'none', scrollTrigger: { trigger: '.dino', start: 'top bottom', end: 'center center', scrub: 1 } });
+    gsap.fromTo('.dino__img', { xPercent: -16 }, { xPercent: 0, ease: 'none', scrollTrigger: { trigger: '.dino', start: 'top bottom', end: 'center center', scrub: 1 } });
     gsap.from('.dino__pill', { scale: 0, rotate: -12, duration: 1, ease: 'back.out(2)', scrollTrigger: { trigger: '.dino', start: 'top 55%' } });
     gsap.from('.dino__badge', { scale: 0, duration: 1, ease: 'back.out(2)', scrollTrigger: { trigger: '.dino', start: 'top 55%' } });
     gsap.from('.dino .round-btn', { x: 40, opacity: 0, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: '.dino', start: 'top 60%' } });
@@ -248,7 +248,7 @@ if (reduce) {
       el.addEventListener('pointerleave', () => gsap.to(el, { rotateX: 0, rotateY: 0, duration: 0.8, ease: 'power3.out' }));
     });
     // Hero photo follows the mouse a little
-    const photo = $('[data-hero-photo] img');
+    const photo = $('.hero__pic img');
     if (photo) {
       window.addEventListener('pointermove', (e) => {
         gsap.to(photo, { x: (e.clientX / innerWidth - 0.5) * 18, y: (e.clientY / innerHeight - 0.5) * 12, duration: 1.2, ease: 'power3.out' });

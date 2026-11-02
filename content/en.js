@@ -74,7 +74,7 @@ export default {
     text: 'My approach combines strategy with creativity, helping brands stand out in today’s digital landscape. Each number reflects real value delivered to clients who trusted my vision.',
     items: [
       { value: 3, suffix: '', head: 'main areas of work', label: 'marketing, graphic design, SMM' },
-      { value: 8, suffix: '+', head: 'years of experience', label: 'in implementing effective solutions' },
+      { value: 9, suffix: '+', head: 'years of experience', label: 'in implementing effective solutions' },
       { value: 35, suffix: '+', head: '', label: 'projects completed on time with successful outcomes' },
       { value: 400, suffix: '+', head: '', label: 'visual communications concepts created' },
     ],
@@ -288,6 +288,7 @@ export default {
       },
     ],
   },
+  band: { label: 'Collaborated with' },
   dino: {
     connect: 'Connect with me',
     title: 'Bringing marketing visions to life through stunning design. Let’s connect!',
