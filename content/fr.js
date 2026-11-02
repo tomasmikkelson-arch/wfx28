@@ -20,6 +20,8 @@ export default {
     about: 'À propos',
     experience: 'Expérience',
     contacts: 'Contacts',
+    media: 'Médias',
+    back: 'Retour aux formations',
     cv: 'Voir le CV',
     menu: 'Menu',
     close: 'Fermer',

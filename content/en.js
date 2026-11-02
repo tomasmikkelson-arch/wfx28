@@ -12,6 +12,8 @@ export default {
     about: 'About me',
     experience: 'Experience',
     contacts: 'Contacts',
+    media: 'Media',
+    back: 'Back to trainings',
     cv: 'View CV',
     menu: 'Menu',
     close: 'Close',

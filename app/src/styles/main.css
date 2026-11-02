@@ -93,7 +93,7 @@ b, strong { font-weight: 700; }
 .header__inner { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 20px; }
 .logo img { width: 160px; height: auto; transition: transform 0.45s var(--ease); }
 .logo:hover img { transform: scale(1.05) rotate(-2deg); }
-.nav { display: flex; gap: 30px; }
+.nav { display: flex; gap: 26px; }
 .nav__link { position: relative; font-weight: 400; font-size: 0.95rem; color: var(--ink); padding: 6px 0; }
 .nav__link::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--purple); transform: scaleX(0); transform-origin: right; transition: transform 0.45s var(--ease); }
 .nav__link:hover::after { transform: scaleX(1); transform-origin: left; }
@@ -279,7 +279,7 @@ b, strong { font-weight: 700; }
 .reviews__sep { display: flex; align-items: center; justify-content: center; gap: 22px; width: min(var(--container), 100% - var(--gutter) * 2); margin: 0 auto 70px; }
 .reviews__sep span { flex: 1; height: 2px; border-radius: 2px; background: linear-gradient(90deg, transparent, var(--lilac)); }
 .reviews__sep span:last-child { transform: scaleX(-1); }
-.reviews__sep img { width: 26px; filter: brightness(0) saturate(100%) invert(52%) sepia(53%) saturate(2700%) hue-rotate(222deg) brightness(101%) contrast(94%); animation: spin 10s linear infinite; }
+.reviews__sep { position: relative; }
 .reviews__note { margin-top: 14px; font-size: 0.85rem; color: var(--muted); font-style: italic; }
 .reviews__head { text-align: center; margin-bottom: 60px; }
 .reviews__kicker { display: inline-block; padding: 7px 16px; border-radius: 999px; background: #efedfd; color: var(--purple); font-size: 0.75rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 18px; }
@@ -561,3 +561,16 @@ b, strong { font-weight: 700; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
 }
+
+/* purple sparkle via mask (filters render pink on some iOS versions) */
+.reviews__sep i { width: 26px; height: 32px; flex: none; background: var(--purple); -webkit-mask: url(/svg/sparkle.svg) center / contain no-repeat; mask: url(/svg/sparkle.svg) center / contain no-repeat; animation: spin 10s linear infinite; }
+
+/* back button on training pages */
+.phero__bar { position: relative; z-index: 2; margin-bottom: 36px; }
+.back { display: inline-flex; align-items: center; gap: 10px; padding: 10px 20px 10px 12px; border-radius: 999px; font-size: 0.85rem; font-weight: 700; background: rgba(255, 255, 255, 0.95); color: var(--ink); box-shadow: 0 10px 24px -14px rgba(28, 26, 26, 0.5); transition: background 0.3s, color 0.3s, gap 0.4s var(--ease); }
+.back svg { width: 30px; height: 30px; padding: 6px; border-radius: 50%; background: var(--purple); color: #fff; transition: transform 0.4s var(--ease); }
+.back:hover { background: var(--ink); color: #fff; gap: 14px; }
+.back:hover svg { transform: translateX(-3px); }
+.page--yellow .back svg { background: var(--ink); color: var(--yellow); }
+.phero { padding-top: calc(var(--header-h) + 40px); }
+@media (max-width: 900px) { .phero__bar { margin-bottom: 24px; } .phero { padding-top: calc(var(--header-h) + 24px); } }

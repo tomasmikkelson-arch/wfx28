@@ -372,3 +372,16 @@ $$('[data-video]').forEach((btn) =>
     btn.replaceWith(f);
   })
 );
+
+/* Back button: return to the exact place on the home page when we came from there */
+$$('[data-back]').forEach((a) =>
+  a.addEventListener('click', (e) => {
+    try {
+      const ref = document.referrer && new URL(document.referrer);
+      if (ref && ref.origin === location.origin && history.length > 1 && new URL(a.href).pathname === ref.pathname) {
+        e.preventDefault();
+        history.back();
+      }
+    } catch {}
+  })
+);

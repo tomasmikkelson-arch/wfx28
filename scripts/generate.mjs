@@ -57,7 +57,8 @@ const icons = {
   facebook: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M13.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.5-1.5h1.6V4.4c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2.2H7.8v3h2.6V21h3.1z"/></svg>`,
   linkedin: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6.9 8.8H3.8V20h3.1V8.8zM5.3 3.9a1.8 1.8 0 1 0 0 3.6 1.8 1.8 0 0 0 0-3.6zM20.2 13.6c0-3-1.6-5-4.4-5-1.4 0-2.4.8-2.8 1.5V8.8H10V20h3.1v-5.6c0-1.5.3-2.9 2.1-2.9 1.8 0 1.8 1.7 1.8 3V20h3.2v-6.4z"/></svg>`,
   facebookOutline: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.8"/><path fill="currentColor" d="M13.4 20.5v-6.2h2.1l.3-2.5h-2.4v-1.6c0-.7.2-1.2 1.2-1.2h1.3V6.8c-.2 0-1-.1-1.9-.1-1.9 0-3.2 1.1-3.2 3.3v1.8H8.7v2.5h2.1v6.2z"/></svg>`,
-  send: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M4 9v10h14M14 4l6 2-2 6M20 6l-9 7"/></svg>`,
+  send: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" stroke-linecap="round" d="M21 3 10.5 13.5M21 3l-6.5 18-4-7.5L3 9.5z"/></svg>`,
+  back: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   close: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>`,
   calendar: `<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>`,
   pin: `<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="1.8" d="M12 21s-6.5-6-6.5-11a6.5 6.5 0 0 1 13 0c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>`,
@@ -142,6 +143,7 @@ function header(t, slug = '') {
       <nav class="nav" aria-label="Main">
         <a href="${home}#biography" class="nav__link">${t.nav.about}</a>
         <a href="${home}#experience" class="nav__link">${t.nav.experience}</a>
+        <a href="${home}#media" class="nav__link">${t.nav.media}</a>
         <a href="${home}#contact" class="nav__link">${t.nav.contacts}</a>
       </nav>
       <div class="header__end">
@@ -155,6 +157,7 @@ function header(t, slug = '') {
     <nav class="menu__nav" aria-label="Mobile">
       <a href="${home}#biography">${t.nav.about}</a>
       <a href="${home}#experience">${t.nav.experience}</a>
+      <a href="${home}#media">${t.nav.media}</a>
       <a href="${home}#contact">${t.nav.contacts}</a>
       <a href="${site.cv}" target="_blank" rel="noopener">${t.nav.cv} ${arrow}</a>
     </nav>
@@ -181,6 +184,7 @@ function footer(t) {
           <ul class="footer__links">
             <li><a href="${home}#biography">${t.nav.about}</a></li>
             <li><a href="${home}#experience">${t.nav.experience}</a></li>
+            <li><a href="${home}#media">${t.nav.media}</a></li>
             <li><a href="${home}#contact" data-popup-open="contact">${t.nav.contacts}</a></li>
           </ul>
         </div>
@@ -272,7 +276,7 @@ function testimonials(t) {
   if (!T || !T.items.length) return '';
   return `
     <section class="reviews" aria-labelledby="reviews-title">
-      <div class="reviews__sep" aria-hidden="true"><span></span><img src="${svg('sparkle')}" alt="" width="28" height="34"><span></span></div>
+      <div class="reviews__sep" aria-hidden="true"><span></span><i></i><span></span></div>
       <div class="container">
         <div class="reviews__head">
           <p class="reviews__kicker reveal">${T.kicker}</p>
@@ -504,6 +508,7 @@ function training(t, slug) {
   <main id="main" class="page page--${p.theme}">
     <section class="phero" id="top">
       <div class="phero__bg" data-parallax="0.2" style="background-image:url(${bg(p.theme === 'purple' ? 'bg-purple' : 'bg-yellow', 2600)})"></div>
+      <div class="container phero__bar"><a class="back" href="${pageUrl(t.lang)}#media" data-back>${icons.back}<span>${t.nav.back}</span></a></div>
       <div class="container phero__grid${p.heroImageLeft ? '' : ' phero__grid--rev'}">${p.heroImageLeft ? heroImg + heroText : heroText + heroImg}</div>
     </section>
     <section class="article container">
