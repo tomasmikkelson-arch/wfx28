@@ -284,14 +284,17 @@ function testimonials(t) {
         <ul class="reviews__list">
           ${T.items
             .map(
-              (r) => `<li class="review reveal" data-tilt>
+              (r) => `<li class="review reveal">
             <svg class="review__mark" viewBox="0 0 48 36" aria-hidden="true"><path fill="currentColor" d="M0 36V22C0 9.6 6.4 2.3 19.2 0l2 5.2C14 7.4 10.6 11.6 10.4 18H20v18H0zm28 0V22C28 9.6 34.4 2.3 47.2 0l2 5.2C42 7.4 38.6 11.6 38.4 18H48v18H28z"/></svg>
             <blockquote class="review__quote"><p>${r.quote}</p></blockquote>
             <div class="review__person">
               ${r.photo ? `<img class="review__photo" src="${asset(`img/people/${r.photo}.webp`)}" alt="${esc(r.name)}" width="64" height="64" loading="lazy">` : ''}
-              <div><p class="review__name">${r.name}</p><p class="review__role">${r.role}</p></div>
+              <div class="review__who">
+                <p class="review__name">${r.url ? `<a href="${r.url}" target="_blank" rel="noopener">${r.name}</a>` : r.name}</p>
+                <p class="review__role">${r.role || T.source}</p>
+              </div>
+              ${r.url ? `<a class="review__in" href="${r.url}" target="_blank" rel="noopener" aria-label="${esc(r.name)} — LinkedIn">${icons.linkedin}</a>` : ''}
             </div>
-            ${r.url ? `<a class="review__src" href="${r.url}" target="_blank" rel="noopener">${icons.linkedin}${T.source}</a>` : ''}
           </li>`
             )
             .join('')}
@@ -515,7 +518,7 @@ function training(t, slug) {
         p.video
           ? `<div class="video reveal-img"><button type="button" class="video__btn" data-video="${p.video.id}" aria-label="Play: ${esc(p.video.title)}">
           <img src="https://i.ytimg.com/vi/${p.video.id}/maxresdefault.jpg" alt="${esc(p.video.title)}" loading="lazy" width="1280" height="720">
-          <span class="video__play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg></span>
+          <span class="video__play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M9 6.8v10.4L17.4 12z" fill="currentColor" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/></svg></span>
         </button></div>`
           : ''
       }

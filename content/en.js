@@ -294,7 +294,27 @@ export default {
     kicker: 'Recommendations',
     source: 'Recommendation on LinkedIn',
     items: [
-      // { name: 'Full Name', role: 'Position, Organisation', photo: 'file-name-in-img-people', quote: 'Text…', url: 'https://www.linkedin.com/in/…' },
+      {
+        name: 'Anastasiia Kolomiichuk',
+        photo: 'anastasiia',
+        url: 'https://www.linkedin.com/in/anastasiia-kolomiichuk-10b14b265/',
+        quote:
+          'Ihor has a clear understanding of communication goals and a strong visual sense. Working together on a legal-sector project, I found him to be a reliable and thoughtful professional. He works well with complex information, understands the context of each task, and finds clear and effective visual solutions. He pays close attention to detail, meets deadlines, and is open to discussion and feedback.',
+      },
+      {
+        name: 'Lidia Khaustova',
+        photo: 'lidia',
+        url: 'https://www.linkedin.com/in/lidia-khaustova/',
+        quote:
+          'Ihor is a goal-driven and energetic person who always strives to achieve the best results. I sincerely recommend him as a talented and inspiring professional who would be a valuable addition to any team. One of his main key strengths is his ability not only to generate innovative ideas but also to implement them with high quality and significant impact. His proactive approach, combined with smooth communication and a positive attitude, has made working with him an absolute pleasure.',
+      },
+      {
+        name: 'Oleksandra Pylypenko',
+        photo: 'oleksandra',
+        url: 'https://www.linkedin.com/in/oleksandra-pylypenko-b90344321/',
+        quote:
+          'He is a professional and reliable person. He takes a responsible approach to his tasks and doesn’t stop until everything is perfect. He thinks in an original way and has fresh, relevant ideas for any situation. He has a good eye and understands current trends well. He is easy to work with, so I definitely recommend him.',
+      },
     ],
   },
   dino: {
