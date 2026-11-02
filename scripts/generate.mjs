@@ -230,10 +230,6 @@ function popups(t, withExp) {
             .map((b) => (b.h ? `<h3>${b.h}</h3>` : b.p ? `<p>${b.p}</p>` : `<ul>${b.li.map((x) => `<li>${x}</li>`).join('')}</ul>`))
             .join('\n          ')}
         </div>
-        <footer class="popup__foot">
-          <p>${t.form.popupText}</p>
-          <button type="button" class="btn btn--dark" data-popup-open="contact">${t.dino.connect} ${arrow}</button>
-        </footer>
       </article>
     </div>
   </dialog>`
